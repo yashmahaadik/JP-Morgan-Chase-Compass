@@ -29,22 +29,25 @@ const Insights: React.FC<InsightsProps> = ({ setViewState, isMobileTab = false }
 
   return (
     <div className={`p-4 md:p-8 pt-6 h-full bg-compass-bg pb-24 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
-        {!isMobileTab && (
-            <div className="flex items-center mb-6">
-                <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-white md:hidden">
-                    <Icons.ArrowLeft />
-                </button>
-                <h1 className="text-xl md:text-3xl font-bold text-white">Insights & Guidance</h1>
-            </div>
-        )}
+        {/* Sticky Header */}
+        <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 pb-2">
+            {!isMobileTab && (
+                <div className="flex items-center mb-4">
+                    <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-compass-text md:hidden">
+                        <Icons.ArrowLeft />
+                    </button>
+                    <h1 className="text-xl md:text-3xl font-bold text-compass-text">Insights & Guidance</h1>
+                </div>
+            )}
 
-        {/* Filters */}
-        <div className="flex gap-2 mb-8 overflow-x-auto no-scrollbar pb-2">
-            {['All', 'Portfolio', 'Goals', 'Market News'].map((filter, i) => (
-                <button key={filter} className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0 ? 'bg-compass-primary text-white shadow-lg shadow-blue-900/20' : 'bg-compass-secondary text-compass-muted hover:bg-compass-secondary/80 hover:text-white'}`}>
-                    {filter}
-                </button>
-            ))}
+            {/* Filters */}
+            <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-2">
+                {['All', 'Portfolio', 'Goals', 'Market News'].map((filter, i) => (
+                    <button key={filter} className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0 ? 'bg-compass-primary text-white shadow-lg shadow-blue-900/20' : 'bg-compass-secondary text-compass-muted hover:bg-compass-secondary/80 hover:text-compass-text'}`}>
+                        {filter}
+                    </button>
+                ))}
+            </div>
         </div>
 
         {/* Gemini AI Card - Full Width Highlight */}
@@ -102,14 +105,14 @@ const Insights: React.FC<InsightsProps> = ({ setViewState, isMobileTab = false }
                                 </div>
                             </div>
                             
-                            <h3 className="text-xl font-bold text-white mb-3 leading-tight">{insight.title}</h3>
+                            <h3 className="text-xl font-bold text-compass-text mb-3 leading-tight">{insight.title}</h3>
                             <p className="text-compass-muted text-sm leading-relaxed mb-6">{insight.description}</p>
                         </div>
 
                         <div className="flex justify-between items-center pt-4 border-t border-compass-secondary/50">
                              <div className="flex gap-4 text-compass-muted">
-                                 <button className="hover:text-white transition-colors"><Icons.ThumbsUp /></button>
-                                 <button className="hover:text-white transition-colors"><Icons.ThumbsDown /></button>
+                                 <button className="hover:text-compass-text transition-colors"><Icons.ThumbsUp /></button>
+                                 <button className="hover:text-compass-text transition-colors"><Icons.ThumbsDown /></button>
                              </div>
                              <button className="bg-compass-secondary hover:bg-compass-primary hover:text-white text-compass-muted hover:shadow-lg transition-all font-semibold text-sm px-4 py-2 rounded-lg">
                                 {insight.actionLabel}

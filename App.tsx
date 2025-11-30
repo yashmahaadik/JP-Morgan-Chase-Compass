@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import LinkedAccounts from './components/LinkedAccounts';
 import SetGoal from './components/SetGoal';
@@ -13,6 +13,16 @@ import { Icons } from './constants';
 const App: React.FC = () => {
   const [viewState, setViewState] = useState<ViewState>(ViewState.DASHBOARD);
   const [activePaymentTab, setActivePaymentTab] = useState('transfer');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const renderView = () => {
     switch (viewState) {
@@ -27,7 +37,7 @@ const App: React.FC = () => {
       case ViewState.INSIGHTS:
         return <Insights setViewState={setViewState} />;
       case ViewState.PROFILE:
-        return <Profile setViewState={setViewState} />;
+        return <Profile setViewState={setViewState} theme={theme} toggleTheme={toggleTheme} />;
       case ViewState.PLANNING:
         return <Planning setViewState={setViewState} />;
       default:
@@ -44,9 +54,9 @@ const App: React.FC = () => {
       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all w-full text-left group
         ${viewState === view 
           ? 'bg-compass-primary text-white font-semibold shadow-[0_0_15px_rgba(0,96,240,0.3)]' 
-          : 'text-compass-muted hover:bg-compass-secondary hover:text-white'}`}
+          : 'text-compass-muted hover:bg-compass-secondary hover:text-compass-text'}`}
     >
-      <div className={`${viewState === view ? 'text-white' : 'text-compass-muted group-hover:text-white'}`}>
+      <div className={`${viewState === view ? 'text-white' : 'text-compass-muted group-hover:text-compass-text'}`}>
         <Icon />
       </div>
       <span>{label}</span>
@@ -54,15 +64,15 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="bg-compass-bg min-h-screen text-compass-text font-sans flex">
+    <div className="bg-compass-bg min-h-screen text-compass-text font-sans flex flex-col md:flex-row transition-colors duration-300">
       
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-72 bg-[#050a10] border-r border-compass-secondary/30 p-6 fixed h-full z-20">
+      <aside className="hidden md:flex flex-col w-72 bg-compass-bg border-r border-compass-secondary/30 p-6 fixed h-full z-20">
         <div className="mb-10 px-2 flex items-center gap-3">
             <div className="w-8 h-8 bg-compass-primary rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(0,96,240,0.5)]">
               <Icons.Target /> 
             </div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Chase Compass</h1>
+            <h1 className="text-xl font-bold text-compass-text tracking-tight">Chase Compass</h1>
         </div>
 
         <nav className="space-y-2 flex-1">
@@ -77,7 +87,7 @@ const App: React.FC = () => {
         {/* Desktop Sidebar Footer / Net Worth Summary */}
         <div className="p-5 bg-compass-card/50 rounded-2xl border border-compass-secondary/30 backdrop-blur-sm">
             <div className="text-xs text-compass-muted mb-2 uppercase font-bold tracking-wider">Total Net Worth</div>
-            <div className="text-2xl font-bold text-white mb-1">$150,000</div>
+            <div className="text-2xl font-bold text-compass-text mb-1">$150,000</div>
             <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">+2.5%</span>
                 <span className="text-xs text-compass-muted">vs last month</span>
@@ -87,6 +97,14 @@ const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 md:ml-72 relative min-h-screen overflow-x-hidden">
+        {/* Mobile Header - Sticky */}
+        <header className="md:hidden sticky top-0 z-30 bg-compass-bg/90 backdrop-blur-md p-4 border-b border-compass-secondary/30 flex items-center gap-3">
+            <div className="w-8 h-8 bg-compass-primary rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(0,96,240,0.5)]">
+                <Icons.Target /> 
+            </div>
+            <h1 className="text-lg font-bold text-compass-text tracking-tight">Chase Compass</h1>
+        </header>
+
         <div className="max-w-7xl mx-auto w-full h-full min-h-screen">
             {renderView()}
         </div>
@@ -95,7 +113,7 @@ const App: React.FC = () => {
         <ChatWidget />
 
         {/* Mobile Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 md:hidden p-4 bg-[#050a10]/95 backdrop-blur-md border-t border-compass-secondary/50 z-50">
+        <div className="fixed bottom-0 left-0 right-0 md:hidden p-4 bg-compass-bg/95 backdrop-blur-md border-t border-compass-secondary/50 z-50">
             {/* Floating Add Funds Button only on dashboard */}
             {viewState === ViewState.DASHBOARD && (
                 <button 
@@ -108,23 +126,23 @@ const App: React.FC = () => {
 
             {/* Tab Bar */}
             <div className="flex justify-between items-center px-4 pb-2">
-                <button onClick={() => setViewState(ViewState.DASHBOARD)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.DASHBOARD ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                <button onClick={() => setViewState(ViewState.DASHBOARD)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.DASHBOARD ? 'text-compass-primary' : 'text-compass-muted hover:text-compass-text'}`}>
                     <Icons.Home />
                     <span className="text-[10px] font-medium">Home</span>
                 </button>
-                <button onClick={() => { setActivePaymentTab('transfer'); setViewState(ViewState.PAYMENTS); }} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PAYMENTS ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                <button onClick={() => { setActivePaymentTab('transfer'); setViewState(ViewState.PAYMENTS); }} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PAYMENTS ? 'text-compass-primary' : 'text-compass-muted hover:text-compass-text'}`}>
                     <Icons.Transfer />
                     <span className="text-[10px] font-medium">Pay</span>
                 </button>
-                <button onClick={() => setViewState(ViewState.LINKED_ACCOUNTS)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.LINKED_ACCOUNTS ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                <button onClick={() => setViewState(ViewState.LINKED_ACCOUNTS)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.LINKED_ACCOUNTS ? 'text-compass-primary' : 'text-compass-muted hover:text-compass-text'}`}>
                     <Icons.Wallet />
                     <span className="text-[10px] font-medium">Accounts</span>
                 </button>
-                <button onClick={() => setViewState(ViewState.PLANNING)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PLANNING ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                <button onClick={() => setViewState(ViewState.PLANNING)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PLANNING ? 'text-compass-primary' : 'text-compass-muted hover:text-compass-text'}`}>
                     <Icons.Target />
                     <span className="text-[10px] font-medium">Plan</span>
                 </button>
-                <button onClick={() => setViewState(ViewState.PROFILE)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PROFILE ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                <button onClick={() => setViewState(ViewState.PROFILE)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PROFILE ? 'text-compass-primary' : 'text-compass-muted hover:text-compass-text'}`}>
                     <Icons.User />
                     <span className="text-[10px] font-medium">Me</span>
                 </button>

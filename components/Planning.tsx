@@ -12,9 +12,9 @@ const Planning: React.FC<PlanningProps> = ({ setViewState }) => {
 
   return (
     <div className="h-full bg-compass-bg animate-fade-in flex flex-col">
-       {/* Mobile Tab Header */}
-       <div className="p-4 pt-6 bg-[#050a10] sticky top-0 z-10 border-b border-compass-secondary/30">
-          <h1 className="text-xl font-bold text-white mb-4">Planning</h1>
+       {/* Mobile Tab Header - Sticky */}
+       <div className="p-4 pt-6 bg-compass-bg sticky top-[60px] z-10 border-b border-compass-secondary/30">
+          <h1 className="text-xl font-bold text-compass-text mb-4">Planning</h1>
           <div className="flex bg-compass-secondary/50 p-1 rounded-xl">
               <button 
                 onClick={() => setActiveTab('insights')}

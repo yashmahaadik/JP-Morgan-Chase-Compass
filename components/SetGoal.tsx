@@ -51,13 +51,13 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
   return (
     <div className={`p-4 md:p-8 pt-6 h-full min-h-screen bg-compass-bg pb-32 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
       {!isMobileTab && (
-        <div className="flex items-center mb-6 justify-between">
-            <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-white md:hidden">
+        <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 flex items-center mb-6 justify-between pb-4 border-b border-compass-secondary/30 md:border-none">
+            <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-compass-text md:hidden">
                 <Icons.ArrowLeft />
             </button>
             <div className="hidden md:block"></div> {/* Spacer */}
-            <h1 className="text-lg md:text-2xl font-bold text-white">Set a New Goal</h1>
-            <button className="text-white opacity-0"><Icons.MoreVertical /></button> {/* Spacer */}
+            <h1 className="text-lg md:text-2xl font-bold text-compass-text">Set a New Goal</h1>
+            <button className="text-compass-text opacity-0"><Icons.MoreVertical /></button> {/* Spacer */}
         </div>
       )}
 
@@ -65,7 +65,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
         {/* Left Column: Form */}
         <div className="space-y-6">
             <div className="space-y-1 mb-2">
-                <h2 className="text-3xl font-bold text-white">What are you saving for?</h2>
+                <h2 className="text-3xl font-bold text-compass-text">What are you saving for?</h2>
                 <p className="text-compass-muted">Let's plan your future, together.</p>
             </div>
 
@@ -78,38 +78,38 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
 
             {/* Goal Name */}
             <div>
-                <label className="block text-white mb-2 text-sm font-medium">Goal Name</label>
+                <label className="block text-compass-text mb-2 text-sm font-medium">Goal Name</label>
                 <input 
                     type="text" 
                     value={goalName}
                     onChange={(e) => setGoalName(e.target.value)}
                     placeholder="e.g., House Down Payment"
-                    className="w-full bg-compass-secondary border border-compass-secondary text-white rounded-xl p-4 focus:outline-none focus:border-compass-primary transition-colors"
+                    className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 focus:outline-none focus:border-compass-primary transition-colors"
                 />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-white mb-2 text-sm font-medium">Amount</label>
+                    <label className="block text-compass-text mb-2 text-sm font-medium">Amount</label>
                     <div className="relative">
                         <span className="absolute left-4 top-4 text-compass-muted">$</span>
                         <input 
                             type="text" 
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            className="w-full bg-compass-secondary border border-compass-secondary text-white rounded-xl p-4 pl-8 focus:outline-none focus:border-compass-primary transition-colors"
+                            className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pl-8 focus:outline-none focus:border-compass-primary transition-colors"
                         />
                     </div>
                 </div>
                 <div>
-                    <label className="block text-white mb-2 text-sm font-medium">Target Date</label>
+                    <label className="block text-compass-text mb-2 text-sm font-medium">Target Date</label>
                     <div className="relative">
                         <input 
                             type="text" 
                             value={targetDate}
                             onChange={(e) => setTargetDate(e.target.value)}
                             placeholder="Dec 2028"
-                            className="w-full bg-compass-secondary border border-compass-secondary text-white rounded-xl p-4 pr-10 focus:outline-none focus:border-compass-primary transition-colors"
+                            className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pr-10 focus:outline-none focus:border-compass-primary transition-colors"
                         />
                         <div className="absolute right-4 top-4 text-compass-muted pointer-events-none">
                             <Icons.Calendar />
@@ -120,12 +120,12 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
 
             {/* Link Account */}
             <div>
-                <label className="block text-white mb-2 text-sm font-medium">Link Account</label>
+                <label className="block text-compass-text mb-2 text-sm font-medium">Link Account</label>
                 <div className="relative">
                     <select
                         value={selectedAccountId}
                         onChange={(e) => setSelectedAccountId(e.target.value)}
-                        className="w-full bg-compass-secondary border border-compass-secondary text-white rounded-xl p-4 pr-10 appearance-none focus:outline-none focus:border-compass-primary transition-colors cursor-pointer"
+                        className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pr-10 appearance-none focus:outline-none focus:border-compass-primary transition-colors cursor-pointer"
                     >
                         <option value="" disabled>Select an account</option>
                         {MOCK_ACCOUNTS.map((account) => (
@@ -143,7 +143,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
 
             {/* Investment Style */}
             <div>
-                <label className="block text-white mb-3 text-sm font-medium">Choose Your Investment Style</label>
+                <label className="block text-compass-text mb-3 text-sm font-medium">Choose Your Investment Style</label>
                 <div className="grid grid-cols-1 gap-3">
                     {['Conservative', 'Moderate', 'Aggressive'].map((s) => (
                         <div 
@@ -153,10 +153,10 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                         >
                             <div className="flex items-center gap-3">
                                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${style === s ? 'border-compass-primary' : 'border-compass-muted'}`}>
-                                    {style === s && <div className="w-2.5 h-2.5 bg-white rounded-full"></div>}
+                                    {style === s && <div className="w-2.5 h-2.5 bg-compass-text rounded-full"></div>}
                                 </div>
                                 <div>
-                                    <div className="text-white font-semibold">{s}</div>
+                                    <div className="text-compass-text font-semibold">{s}</div>
                                     <div className="text-compass-muted text-xs">
                                         {s === 'Conservative' ? 'Focuses on capital preservation.' : 
                                          s === 'Moderate' ? 'Balanced approach to growth.' : 
@@ -177,25 +177,25 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                 <div className="flex justify-between items-end mb-6">
                     <div>
                         <div className="text-sm text-compass-muted uppercase tracking-wider mb-1">Projected Growth</div>
-                        <div className={`text-4xl font-bold ${style === 'Aggressive' ? 'text-compass-primary' : 'text-white'}`}>
+                        <div className={`text-4xl font-bold ${style === 'Aggressive' ? 'text-compass-primary' : 'text-compass-text'}`}>
                             {style === 'Conservative' ? '+3.5%' : style === 'Moderate' ? '+6.2%' : '+9.8%'}
                         </div>
                         <div className="text-sm text-compass-muted mt-1">Estimated annual return</div>
                     </div>
                     <div className="text-right">
                          <div className="text-sm text-compass-muted">Target</div>
-                         <div className="text-xl font-bold text-white">${parseInt(amount).toLocaleString()}</div>
+                         <div className="text-xl font-bold text-compass-text">${parseInt(amount).toLocaleString()}</div>
                     </div>
                 </div>
 
                 <div className="flex-1 w-full min-h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-secondary)" />
                              <XAxis dataKey="name" hide />
                              <YAxis hide />
                              <Tooltip 
-                                contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', color: '#f1f5f9' }}
+                                contentStyle={{ backgroundColor: 'var(--color-card)', borderColor: 'var(--color-secondary)', color: 'var(--color-text)' }}
                              />
                              <Line 
                                 type="monotone" 

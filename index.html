@@ -16,12 +16,12 @@
             },
             colors: {
               compass: {
-                bg: '#050a10', // Deep Navy/Black
-                card: '#0f172a', // Slate 900/Navy
+                bg: 'var(--color-bg)',
+                card: 'var(--color-card)',
                 primary: '#0060F0', // Chase Electric Blue
                 primaryDark: '#004bc2',
-                secondary: '#1e293b', // Slate 800
-                text: '#f1f5f9',
+                secondary: 'var(--color-secondary)',
+                text: 'var(--color-text)',
                 muted: '#94a3b8',
                 accent: '#38bdf8', // Cyan
                 danger: '#ef4444',
@@ -33,24 +33,49 @@
       }
     </script>
     <style>
-      body {
-        background-color: #050a10;
-        color: #f1f5f9;
-        -webkit-font-smoothing: antialiased;
+      :root {
+        /* Default Dark Mode */
+        --color-bg: #050a10;
+        --color-card: #0f172a;
+        --color-secondary: #1e293b;
+        --color-text: #f1f5f9;
       }
+
+      [data-theme='light'] {
+        --color-bg: #f0f2f5;
+        --color-card: #ffffff;
+        --color-secondary: #e2e8f0;
+        --color-text: #0f172a;
+      }
+
+      body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        -webkit-font-smoothing: antialiased;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
       /* Custom Scrollbar for sleek look */
       ::-webkit-scrollbar {
         width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #050a10;
+        background: var(--color-bg);
       }
       ::-webkit-scrollbar-thumb {
-        background: #1e293b;
+        background: var(--color-secondary);
         border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #0060F0;
+      }
+      
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
       }
     </style>
   <script type="importmap">
