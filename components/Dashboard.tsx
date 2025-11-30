@@ -44,16 +44,16 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
   return (
     <div className="p-4 md:p-8 space-y-6 md:space-y-6 md:grid md:grid-cols-12 md:gap-6 animate-fade-in pb-32 block">
       
-      {/* Sticky Header - Span Full */}
+      {/* Sticky Header - Span Full - Removed Border */}
       {/* Mobile: Top 60px to sit below App header, Desktop: Top 0 */}
-      <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 pb-4 md:mx-0 md:px-0 md:bg-transparent md:backdrop-blur-none col-span-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 transition-all border-b border-compass-secondary/30 md:border-none shadow-lg md:shadow-none">
+      <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 pb-4 md:mx-0 md:px-0 md:bg-transparent md:backdrop-blur-none col-span-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 transition-all shadow-lg md:shadow-none">
         <div>
            <div className="text-compass-muted text-sm uppercase tracking-wider font-semibold">Total Net Worth</div>
            <div className="text-3xl md:text-5xl font-bold text-compass-text mt-1 tracking-tight">${netWorth.toLocaleString()}.00</div>
         </div>
         
         {/* Financial Health Score */}
-        <div className="flex items-center gap-4 bg-compass-card border border-compass-secondary/50 px-5 py-3 rounded-2xl shadow-lg hover:border-compass-primary/30 transition-colors cursor-pointer group">
+        <div className="flex items-center gap-4 bg-compass-card px-5 py-3 rounded-2xl shadow-lg cursor-pointer group hover:shadow-xl transition-shadow">
              <div className="relative w-14 h-14 flex items-center justify-center">
                 <svg className="w-full h-full transform -rotate-90">
                     <circle cx="28" cy="28" r="22" stroke="var(--color-secondary)" strokeWidth="5" fill="transparent" />
@@ -68,8 +68,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
         </div>
       </div>
 
-      {/* Donut Chart Card - Mobile: Full, Desktop: 4 cols */}
-      <div className="bg-compass-card rounded-3xl p-6 shadow-xl relative overflow-hidden md:col-span-4 lg:col-span-4 flex flex-col justify-between border border-compass-secondary/30">
+      {/* Donut Chart Card - Mobile: Full, Desktop: 4 cols - Removed Border */}
+      <div className="bg-compass-card rounded-3xl p-6 shadow-xl relative overflow-hidden md:col-span-4 lg:col-span-4 flex flex-col justify-between">
         <h3 className="text-lg font-bold text-compass-text mb-4">Asset Allocation</h3>
         <div className="h-64 relative z-10">
           <ResponsiveContainer width="100%" height="100%">
@@ -118,8 +118,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
         </div>
       </div>
 
-      {/* Investment Performance - Mobile: Full, Desktop: 8 cols */}
-      <div className="bg-compass-card rounded-3xl p-6 border border-compass-secondary/30 md:col-span-8 lg:col-span-8 flex flex-col shadow-xl">
+      {/* Investment Performance - Mobile: Full, Desktop: 8 cols - Removed Border */}
+      <div className="bg-compass-card rounded-3xl p-6 md:col-span-8 lg:col-span-8 flex flex-col shadow-xl">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-bold text-compass-text">Investment Performance</h3>
             <div className="flex gap-1 bg-compass-bg p-1 rounded-xl">
@@ -165,7 +165,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
 
         <div className="space-y-3">
             {MOCK_ACCOUNTS.slice(0, 3).map((account) => (
-                <div key={account.id} className="bg-compass-card p-4 rounded-2xl flex justify-between items-center hover:bg-compass-secondary/80 transition-all border border-transparent hover:border-compass-secondary cursor-pointer group shadow-md">
+                <div key={account.id} className="bg-compass-card p-4 rounded-2xl flex justify-between items-center hover:bg-compass-secondary/80 transition-all cursor-pointer group shadow-md">
                     <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-transform group-hover:scale-110 ${account.balance < 0 ? 'bg-white text-black' : 'bg-gradient-to-br from-gray-700 to-gray-900 text-white'}`}>
                             <span className="font-bold text-xs">{account.name.substring(0,2).toUpperCase()}</span>
@@ -182,18 +182,18 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
             ))}
         </div>
         
-        {/* Add Funds Button for Desktop */}
+        {/* Add Funds Button for Desktop - Removed Border */}
         <button 
           onClick={() => setViewState(ViewState.CREATE_GOAL)}
-          className="hidden md:flex w-full bg-compass-bg hover:bg-compass-secondary border border-dashed border-compass-secondary hover:border-compass-primary text-compass-muted hover:text-compass-text font-semibold py-4 rounded-2xl items-center justify-center gap-2 transition-all"
+          className="hidden md:flex w-full bg-compass-bg hover:bg-compass-secondary text-compass-muted hover:text-compass-text font-semibold py-4 rounded-2xl items-center justify-center gap-2 transition-all shadow-sm"
         >
             <Icons.Plus />
             Link Another Account
         </button>
       </div>
 
-      {/* Debt Summary - Mobile: Full, Desktop: 6 cols */}
-      <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 border border-compass-secondary/30 flex flex-col justify-center shadow-xl">
+      {/* Debt Summary - Mobile: Full, Desktop: 6 cols - Removed Border */}
+      <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 flex flex-col justify-center shadow-xl">
           <div className="flex justify-between items-start mb-8">
              <div>
                 <h3 className="text-lg font-bold text-compass-text">Debt Summary</h3>
@@ -226,8 +226,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
           </div>
       </div>
 
-      {/* NEW FEATURE: My Wallet / Cards - Mobile: Full, Desktop: 6 cols */}
-      <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 border border-compass-secondary/30 flex flex-col shadow-xl">
+      {/* NEW FEATURE: My Wallet / Cards - Mobile: Full, Desktop: 6 cols - Removed Border */}
+      <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 flex flex-col shadow-xl">
           <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-compass-text flex items-center gap-2">
                   <Icons.CreditCard /> My Wallet
@@ -244,8 +244,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
              onClick={() => navigateToPayments('wallet')}
              className="flex flex-col sm:flex-row gap-6 cursor-pointer"
           >
-              {/* Card Visual - Sapphire Reserve Style */}
-              <div className="w-full sm:w-1/2 aspect-[1.586/1] bg-gradient-to-br from-[#0c1e4c] via-[#003087] to-[#001b4d] rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform border border-white/10">
+              {/* Card Visual - Sapphire Reserve Style - Removed Border */}
+              <div className="w-full sm:w-1/2 aspect-[1.586/1] bg-gradient-to-br from-[#0c1e4c] via-[#003087] to-[#001b4d] rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
                   {/* Metallic sheen effect */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                   
@@ -277,7 +277,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
                         <span>Progress to bonus</span>
                         <span>$2,800 / $4,000</span>
                     </div>
-                    <div className="w-full bg-compass-bg h-2 rounded-full overflow-hidden border border-compass-secondary/50">
+                    <div className="w-full bg-compass-bg h-2 rounded-full overflow-hidden">
                         <div className="bg-gradient-to-r from-compass-primary to-cyan-400 h-full w-[70%] rounded-full shadow-[0_0_10px_rgba(56,189,248,0.5)]"></div>
                     </div>
                   </div>
@@ -285,8 +285,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
           </div>
       </div>
 
-      {/* NEW FEATURE: Quick Pay / Pay Friends - Mobile: Full, Desktop: 6 cols */}
-      <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 border border-compass-secondary/30 flex flex-col shadow-xl">
+      {/* NEW FEATURE: Quick Pay / Pay Friends - Mobile: Full, Desktop: 6 cols - Removed Border */}
+      <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 flex flex-col shadow-xl">
            <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-compass-text flex items-center gap-2">
                   <Icons.Users /> Quick Pay with Zelle®
@@ -306,7 +306,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
                         onClick={() => navigateToPayments('transfer')}
                         className="flex flex-col items-center gap-2 cursor-pointer group min-w-[60px]"
                     >
-                        <div className="w-14 h-14 rounded-full bg-compass-bg border-2 border-dashed border-compass-muted/50 flex items-center justify-center text-compass-muted group-hover:text-compass-text group-hover:border-compass-primary transition-all">
+                        <div className="w-14 h-14 rounded-full bg-compass-bg flex items-center justify-center text-compass-muted group-hover:text-compass-text transition-all shadow-md">
                             <Icons.Plus />
                         </div>
                         <span className="text-xs text-compass-muted font-medium">Add New</span>
@@ -318,7 +318,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
                             onClick={() => navigateToPayments('transfer')}
                             className="flex flex-col items-center gap-2 cursor-pointer group min-w-[60px]"
                         >
-                             <div className={`w-14 h-14 rounded-full flex items-center justify-center text-sm font-bold shadow-lg border-2 border-transparent group-hover:border-compass-primary group-hover:scale-105 transition-all ${
+                             <div className={`w-14 h-14 rounded-full flex items-center justify-center text-sm font-bold shadow-lg transition-all transform group-hover:scale-105 ${
                                  i === 0 ? 'bg-gradient-to-br from-purple-600 to-indigo-700 text-white' : 
                                  i === 1 ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white' :
                                  i === 2 ? 'bg-gradient-to-br from-teal-500 to-emerald-600 text-white' :
@@ -334,7 +334,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
                 <div className="flex gap-3">
                     <button 
                         onClick={() => navigateToPayments('transfer')}
-                        className="flex-1 bg-compass-secondary hover:bg-compass-secondary/80 text-compass-primary hover:text-compass-text py-3 rounded-xl text-sm font-bold transition-all border border-compass-primary/20 hover:border-compass-primary/50"
+                        className="flex-1 bg-compass-secondary hover:bg-compass-secondary/80 text-compass-primary hover:text-compass-text py-3 rounded-xl text-sm font-bold transition-all"
                     >
                         Request
                     </button>
@@ -348,8 +348,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
           </div>
       </div>
 
-       {/* NEW FEATURE: Recent Transactions (Span 8) */}
-       <div className="bg-compass-card rounded-3xl p-6 md:col-span-8 border border-compass-secondary/30 shadow-xl">
+       {/* NEW FEATURE: Recent Transactions (Span 8) - Removed Border */}
+       <div className="bg-compass-card rounded-3xl p-6 md:col-span-8 shadow-xl">
           <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-compass-text flex items-center gap-2">
                   <Icons.Activity /> Recent Transactions
@@ -382,8 +382,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
           </div>
        </div>
 
-       {/* NEW FEATURE: Recurring Expenses / Bills (Span 4) */}
-       <div className="bg-compass-card rounded-3xl p-6 md:col-span-4 border border-compass-secondary/30 shadow-xl flex flex-col">
+       {/* NEW FEATURE: Recurring Expenses / Bills (Span 4) - Removed Border */}
+       <div className="bg-compass-card rounded-3xl p-6 md:col-span-4 shadow-xl flex flex-col">
           <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-compass-text flex items-center gap-2">
                   <Icons.Repeat /> Upcoming
@@ -405,7 +405,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
                   <div 
                     key={i} 
                     onClick={() => navigateToPayments('bills')}
-                    className="bg-compass-bg/50 rounded-xl p-3 flex items-center justify-between group hover:bg-compass-secondary transition-all cursor-pointer border border-transparent hover:border-compass-primary/20"
+                    className="bg-compass-bg/50 rounded-xl p-3 flex items-center justify-between group hover:bg-compass-secondary transition-all cursor-pointer"
                   >
                        <div className="flex items-center gap-3">
                            <div className="w-8 h-8 rounded-lg bg-compass-secondary group-hover:bg-compass-card flex items-center justify-center text-compass-muted group-hover:text-compass-text transition-colors text-xs">

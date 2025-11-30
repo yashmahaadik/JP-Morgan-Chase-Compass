@@ -29,7 +29,7 @@ const Insights: React.FC<InsightsProps> = ({ setViewState, isMobileTab = false }
 
   return (
     <div className={`p-4 md:p-8 pt-6 h-full bg-compass-bg pb-24 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
-        {/* Sticky Header */}
+        {/* Sticky Header - Removed Border */}
         <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 pb-2">
             {!isMobileTab && (
                 <div className="flex items-center mb-4">
@@ -50,8 +50,8 @@ const Insights: React.FC<InsightsProps> = ({ setViewState, isMobileTab = false }
             </div>
         </div>
 
-        {/* Gemini AI Card - Full Width Highlight */}
-        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl p-6 mb-8 border border-compass-primary/30 relative overflow-hidden shadow-2xl shadow-blue-900/10">
+        {/* Gemini AI Card - Full Width Highlight - Removed Border */}
+        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl p-6 mb-8 relative overflow-hidden shadow-2xl shadow-blue-900/10">
              <div className="absolute top-0 right-0 p-3 opacity-10 text-compass-primary transform scale-150">
                 <Icons.Sparkles />
              </div>
@@ -91,6 +91,7 @@ const Insights: React.FC<InsightsProps> = ({ setViewState, isMobileTab = false }
                 }
 
                 return (
+                    // Removed Border
                     <div key={insight.id} className="bg-compass-card rounded-2xl p-6 border-l-4 border-transparent hover:border-l-compass-secondary hover:-translate-y-1 transition-all duration-300 shadow-lg flex flex-col justify-between h-full">
                         <div>
                             <div className="flex justify-between items-start mb-4">

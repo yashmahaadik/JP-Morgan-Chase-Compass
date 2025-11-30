@@ -39,7 +39,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
 
   return (
     <div className="p-4 md:p-8 pt-6 h-full bg-compass-bg pb-32 animate-fade-in">
-        {/* Sticky Header Container */}
+        {/* Sticky Header Container - Removed Border */}
         <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0">
             <div className="flex items-center mb-4">
                 <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-compass-text md:hidden">
@@ -82,8 +82,8 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                      
-                     {/* TAP TO PAY (Replacing Scan & Pay) */}
-                     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 shadow-xl relative overflow-hidden group cursor-pointer border border-white/10 hover:scale-[1.01] transition-transform">
+                     {/* TAP TO PAY (Replacing Scan & Pay) - Removed Border */}
+                     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 shadow-xl relative overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform">
                          <div className="absolute right-0 top-0 h-full w-1/2 bg-white/5 skew-x-12 transform translate-x-12"></div>
                          <div className="relative z-10 flex flex-col items-center py-4">
                               <div className="bg-white p-3 rounded-2xl mb-3 shadow-lg">
@@ -104,7 +104,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                               { label: 'Check Balance', icon: <Icons.ShieldCheck />, color: 'text-orange-400' },
                           ].map((action, i) => (
                               <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group">
-                                   <div className="w-14 h-14 rounded-full bg-compass-card border border-compass-secondary flex items-center justify-center text-xl group-hover:border-compass-primary group-hover:scale-110 transition-all shadow-lg">
+                                   <div className="w-14 h-14 rounded-full bg-compass-card flex items-center justify-center text-xl group-hover:scale-110 transition-all shadow-lg">
                                        <span className={action.color}>{action.icon}</span>
                                    </div>
                                    <span className="text-[10px] text-center font-medium text-compass-muted group-hover:text-compass-text leading-tight max-w-[70px]">{action.label}</span>
@@ -120,7 +120,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                         </div>
                         <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-y-6 gap-x-2">
                              <div className="flex flex-col items-center gap-2 cursor-pointer group">
-                                <div className="w-14 h-14 rounded-full bg-compass-bg border-2 border-dashed border-compass-muted/50 flex items-center justify-center text-compass-muted hover:border-compass-primary hover:text-compass-text transition-all">
+                                <div className="w-14 h-14 rounded-full bg-compass-bg flex items-center justify-center text-compass-muted hover:text-compass-text transition-all shadow-md">
                                     <Icons.Plus />
                                 </div>
                                 <span className="text-xs text-compass-muted">New</span>
@@ -147,8 +147,8 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                 </div>
 
                 <div className="space-y-6">
-                     {/* SPLIT BILL WIDGET */}
-                     <div className="bg-compass-card rounded-3xl p-6 border border-compass-secondary/30 shadow-xl">
+                     {/* SPLIT BILL WIDGET - Removed Border */}
+                     <div className="bg-compass-card rounded-3xl p-6 shadow-xl">
                           <div className="flex justify-between items-center mb-4">
                               <h3 className="text-lg font-bold text-compass-text flex items-center gap-2"><Icons.Split /> Split Expense</h3>
                               <span className="bg-compass-secondary text-xs px-2 py-1 rounded text-compass-muted">Beta</span>
@@ -173,8 +173,8 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                           </div>
                      </div>
 
-                    {/* RECENT ACTIVITY */}
-                    <div className="bg-compass-card rounded-3xl p-6 border border-compass-secondary/30 shadow-xl h-fit">
+                    {/* RECENT ACTIVITY - Removed Border */}
+                    <div className="bg-compass-card rounded-3xl p-6 shadow-xl h-fit">
                         <h3 className="text-lg font-bold text-compass-text mb-6">Recent Activity</h3>
                         <div className="space-y-4">
                             {transactions.map((tx) => (
@@ -220,7 +220,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                              { label: 'More', icon: <Icons.MoreVertical />, color: 'text-gray-400' },
                          ].map((item, i) => (
                               <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group p-2 rounded-xl hover:bg-compass-secondary/30 transition-all">
-                                   <div className={`w-12 h-12 rounded-2xl bg-compass-card border border-compass-secondary flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-lg ${item.color}`}>
+                                   <div className={`w-12 h-12 rounded-2xl bg-compass-card flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-lg ${item.color}`}>
                                        {item.icon}
                                    </div>
                                    <span className="text-[10px] text-compass-muted group-hover:text-compass-text font-medium">{item.label}</span>
@@ -229,7 +229,8 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                      </div>
                  </div>
 
-                 <div className="bg-compass-card rounded-3xl p-6 border border-compass-secondary/30 shadow-xl">
+                 {/* Removed Border */}
+                 <div className="bg-compass-card rounded-3xl p-6 shadow-xl">
                       <h3 className="text-lg font-bold text-compass-text mb-6">Upcoming Subscriptions</h3>
                       <div className="space-y-2">
                            {subscriptions.map((bill, i) => (
@@ -257,7 +258,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
         {/* REWARDS TAB */}
         {renderTab === 'rewards' && (
             <div className="max-w-4xl mx-auto">
-                <div className="bg-gradient-to-r from-yellow-600 to-amber-700 rounded-3xl p-8 mb-8 text-center relative overflow-hidden shadow-2xl border border-white/10">
+                <div className="bg-gradient-to-r from-yellow-600 to-amber-700 rounded-3xl p-8 mb-8 text-center relative overflow-hidden shadow-2xl">
                      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                      <h2 className="text-sm font-bold text-yellow-100 uppercase tracking-widest mb-2 relative z-10">Total Rewards Earned</h2>
                      <div className="text-5xl font-bold text-white mb-2 drop-shadow-md relative z-10">$482</div>
@@ -275,14 +276,14 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                          </div>
                      ))}
                      
-                     {/* Scratched/Revealed */}
+                     {/* Scratched/Revealed - Removed Border */}
                      {[
                          { amount: '$12', label: 'Cashback' },
                          { amount: '$5', label: 'Coffee Reward' },
                          { amount: '$25', label: 'Referral Bonus' },
                          { amount: '10%', label: 'Off Nike' }
                      ].map((reward, i) => (
-                         <div key={i} className="aspect-square bg-compass-card rounded-2xl flex flex-col items-center justify-center p-4 border border-compass-secondary/50 relative overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
+                         <div key={i} className="aspect-square bg-compass-card rounded-2xl flex flex-col items-center justify-center p-4 relative overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
                              <div className="text-3xl font-bold text-emerald-400 mb-1">{reward.amount}</div>
                              <div className="text-xs text-compass-muted font-medium text-center">{reward.label}</div>
                              <div className="absolute bottom-2 text-[10px] text-compass-muted/50">Won Oct {10-i}</div>
@@ -296,7 +297,8 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
         {renderTab === 'wallet' && (
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                  <div className="space-y-6">
-                    <div className="bg-gradient-to-br from-[#0c1e4c] via-[#003087] to-[#001b4d] rounded-2xl p-8 aspect-[1.586/1] shadow-2xl relative overflow-hidden group border border-white/10">
+                    {/* Removed Border */}
+                    <div className="bg-gradient-to-br from-[#0c1e4c] via-[#003087] to-[#001b4d] rounded-2xl p-8 aspect-[1.586/1] shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                         
                         <div className="flex justify-between items-start z-10 relative">
@@ -324,23 +326,25 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <button className="bg-compass-card hover:bg-compass-secondary border border-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        {/* Removed Border */}
+                        <button className="bg-compass-card hover:bg-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all shadow-md">
                             <div className="p-2 bg-compass-primary/20 rounded-full text-compass-primary"><Icons.ShieldCheck /></div>
                             <span className="text-sm font-bold text-compass-text">Lock Card</span>
                         </button>
-                        <button className="bg-compass-card hover:bg-compass-secondary border border-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <button className="bg-compass-card hover:bg-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all shadow-md">
                             <div className="p-2 bg-compass-primary/20 rounded-full text-compass-primary"><Icons.Repeat /></div>
                             <span className="text-sm font-bold text-compass-text">Replace</span>
                         </button>
                     </div>
                  </div>
 
-                 <div className="bg-compass-card rounded-3xl p-6 border border-compass-secondary/30 shadow-xl">
+                 {/* Removed Border */}
+                 <div className="bg-compass-card rounded-3xl p-6 shadow-xl">
                       <div className="flex justify-between items-center mb-6">
                           <h3 className="text-lg font-bold text-compass-text">Ultimate Rewards®</h3>
                           <span className="text-compass-primary text-sm font-bold cursor-pointer hover:underline">Redeem</span>
                       </div>
-                      <div className="bg-compass-bg rounded-2xl p-6 mb-6 border border-compass-secondary/50">
+                      <div className="bg-compass-bg rounded-2xl p-6 mb-6">
                            <div className="text-sm text-compass-muted font-medium uppercase tracking-wide mb-1">Current Balance</div>
                            <div className="text-4xl font-bold text-compass-text mb-2">54,320 <span className="text-lg text-compass-muted">pts</span></div>
                            <div className="text-sm text-emerald-400 font-bold bg-emerald-400/10 inline-block px-3 py-1 rounded-full">

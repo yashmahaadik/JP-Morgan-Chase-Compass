@@ -51,7 +51,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
   return (
     <div className={`p-4 md:p-8 pt-6 h-full min-h-screen bg-compass-bg pb-32 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
       {!isMobileTab && (
-        <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 flex items-center mb-6 justify-between pb-4 border-b border-compass-secondary/30 md:border-none">
+        <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 flex items-center mb-6 justify-between pb-4 md:border-none">
             <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-compass-text md:hidden">
                 <Icons.ArrowLeft />
             </button>
@@ -172,8 +172,8 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
 
         {/* Right Column: Preview & Action (Desktop) */}
         <div className="flex flex-col gap-6">
-             {/* Projection Card */}
-             <div className="bg-compass-card p-6 rounded-2xl border border-compass-secondary/30 shadow-xl h-full flex flex-col">
+             {/* Projection Card - Removed Border */}
+             <div className="bg-compass-card p-6 rounded-2xl shadow-xl h-full flex flex-col">
                 <div className="flex justify-between items-end mb-6">
                     <div>
                         <div className="text-sm text-compass-muted uppercase tracking-wider mb-1">Projected Growth</div>

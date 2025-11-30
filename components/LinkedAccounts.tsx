@@ -9,8 +9,8 @@ interface LinkedAccountsProps {
 const LinkedAccounts: React.FC<LinkedAccountsProps> = ({ setViewState }) => {
   return (
     <div className="p-4 md:p-8 pt-6 h-full bg-compass-bg animate-fade-in">
-        {/* Sticky Header */}
-        <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 pb-4 mb-4 border-b border-compass-secondary/30 md:border-none">
+        {/* Sticky Header - Removed Border */}
+        <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 pb-4 mb-4">
             <div className="flex items-center mb-4">
                 <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-compass-text md:hidden">
                     <Icons.ArrowLeft />
@@ -49,7 +49,8 @@ const LinkedAccounts: React.FC<LinkedAccountsProps> = ({ setViewState }) => {
                  }
 
                 return (
-                    <div key={account.id} className="bg-compass-card rounded-xl p-6 flex flex-col justify-between border border-transparent hover:border-compass-primary/30 transition-all group min-h-[160px]">
+                    /* Removed Border */
+                    <div key={account.id} className="bg-compass-card rounded-xl p-6 flex flex-col justify-between transition-all group min-h-[160px] shadow-md hover:shadow-lg">
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex gap-4">
                                 <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shrink-0 shadow-md">

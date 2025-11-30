@@ -66,8 +66,8 @@ const App: React.FC = () => {
   return (
     <div className="bg-compass-bg min-h-screen text-compass-text font-sans flex flex-col md:flex-row transition-colors duration-300">
       
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-72 bg-compass-bg border-r border-compass-secondary/30 p-6 fixed h-full z-20">
+      {/* Desktop Sidebar - Removed Border Right */}
+      <aside className="hidden md:flex flex-col w-72 bg-compass-bg p-6 fixed h-full z-20">
         <div className="mb-10 px-2 flex items-center gap-3">
             <div className="w-8 h-8 bg-compass-primary rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(0,96,240,0.5)]">
               <Icons.Target /> 
@@ -85,7 +85,7 @@ const App: React.FC = () => {
         </nav>
 
         {/* Desktop Sidebar Footer / Net Worth Summary */}
-        <div className="p-5 bg-compass-card/50 rounded-2xl border border-compass-secondary/30 backdrop-blur-sm">
+        <div className="p-5 bg-compass-card/50 rounded-2xl backdrop-blur-sm shadow-sm">
             <div className="text-xs text-compass-muted mb-2 uppercase font-bold tracking-wider">Total Net Worth</div>
             <div className="text-2xl font-bold text-compass-text mb-1">$150,000</div>
             <div className="flex items-center gap-2">
@@ -97,8 +97,8 @@ const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 md:ml-72 relative min-h-screen overflow-x-hidden">
-        {/* Mobile Header - Sticky */}
-        <header className="md:hidden sticky top-0 z-30 bg-compass-bg/90 backdrop-blur-md p-4 border-b border-compass-secondary/30 flex items-center gap-3">
+        {/* Mobile Header - Sticky - Removed Border Bottom */}
+        <header className="md:hidden sticky top-0 z-30 bg-compass-bg p-4 flex items-center gap-3 shadow-md">
             <div className="w-8 h-8 bg-compass-primary rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(0,96,240,0.5)]">
                 <Icons.Target /> 
             </div>
@@ -112,8 +112,8 @@ const App: React.FC = () => {
         {/* Floating Chat Widget */}
         <ChatWidget />
 
-        {/* Mobile Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 md:hidden p-4 bg-compass-bg/95 backdrop-blur-md border-t border-compass-secondary/50 z-50">
+        {/* Mobile Bottom Navigation - Opaque Background, No Border */}
+        <div className="fixed bottom-0 left-0 right-0 md:hidden p-4 bg-compass-bg z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.2)]">
             {/* Floating Add Funds Button only on dashboard */}
             {viewState === ViewState.DASHBOARD && (
                 <button 
