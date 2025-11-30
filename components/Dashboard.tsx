@@ -284,11 +284,11 @@ const Dashboard: React.FC<DashboardProps> = ({ setViewState, setActivePaymentTab
           </div>
       </div>
 
-      {/* NEW FEATURE: Quick Move / Pay Friends - Mobile: Full, Desktop: 6 cols */}
+      {/* NEW FEATURE: Quick Pay / Pay Friends - Mobile: Full, Desktop: 6 cols */}
       <div className="bg-compass-card rounded-3xl p-6 md:col-span-6 lg:col-span-6 border border-compass-secondary/30 flex flex-col shadow-xl">
            <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Icons.Users /> Quick Move
+                  <Icons.Users /> Quick Pay with Zelle®
               </h3>
               <button 
                 onClick={() => navigateToPayments('transfer')}
