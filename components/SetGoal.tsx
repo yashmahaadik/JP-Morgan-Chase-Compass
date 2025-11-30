@@ -5,9 +5,10 @@ import { ViewState } from '../types';
 
 interface SetGoalProps {
   setViewState: (view: ViewState) => void;
+  isMobileTab?: boolean;
 }
 
-const SetGoal: React.FC<SetGoalProps> = ({ setViewState }) => {
+const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) => {
   const [goalName, setGoalName] = useState('House Down Payment');
   const [amount, setAmount] = useState('50000');
   const [targetDate, setTargetDate] = useState('');
@@ -48,15 +49,17 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState }) => {
   };
 
   return (
-    <div className="p-4 md:p-8 pt-6 h-full min-h-screen bg-compass-bg pb-32 animate-fade-in">
-      <div className="flex items-center mb-6 justify-between">
-          <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-white md:hidden">
-            <Icons.ArrowLeft />
-          </button>
-          <div className="hidden md:block"></div> {/* Spacer */}
-          <h1 className="text-lg md:text-2xl font-bold text-white">Set a New Goal</h1>
-          <button className="text-white opacity-0"><Icons.MoreVertical /></button> {/* Spacer */}
-      </div>
+    <div className={`p-4 md:p-8 pt-6 h-full min-h-screen bg-compass-bg pb-32 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
+      {!isMobileTab && (
+        <div className="flex items-center mb-6 justify-between">
+            <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-white md:hidden">
+                <Icons.ArrowLeft />
+            </button>
+            <div className="hidden md:block"></div> {/* Spacer */}
+            <h1 className="text-lg md:text-2xl font-bold text-white">Set a New Goal</h1>
+            <button className="text-white opacity-0"><Icons.MoreVertical /></button> {/* Spacer */}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
         {/* Left Column: Form */}
@@ -218,14 +221,26 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState }) => {
       </div>
         
       {/* Mobile Sticky Button */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-compass-bg via-compass-bg to-transparent z-10">
-          <button 
-            onClick={handleCreateGoal}
-            className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all"
-          >
-              Create Goal
-          </button>
-      </div>
+      {!isMobileTab && (
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-compass-bg via-compass-bg to-transparent z-10">
+              <button 
+                onClick={handleCreateGoal}
+                className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all"
+              >
+                  Create Goal
+              </button>
+          </div>
+      )}
+      {isMobileTab && (
+           <div className="lg:hidden p-4">
+              <button 
+                onClick={handleCreateGoal}
+                className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all"
+              >
+                  Create Goal
+              </button>
+          </div>
+      )}
 
     </div>
   );

@@ -79,15 +79,16 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                      
-                     {/* SCAN & PAY */}
+                     {/* TAP TO PAY (Replacing Scan & Pay) */}
                      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 shadow-xl relative overflow-hidden group cursor-pointer border border-white/10 hover:scale-[1.01] transition-transform">
                          <div className="absolute right-0 top-0 h-full w-1/2 bg-white/5 skew-x-12 transform translate-x-12"></div>
                          <div className="relative z-10 flex flex-col items-center py-4">
                               <div className="bg-white p-3 rounded-2xl mb-3 shadow-lg">
-                                  <div className="text-black"><Icons.QrCode /></div>
+                                  {/* Using Wifi icon rotated 90deg to simulate NFC/Contactless */}
+                                  <div className="text-black transform rotate-90"><Icons.Wifi /></div>
                               </div>
-                              <h2 className="text-xl font-bold text-white">Scan any QR code</h2>
-                              <p className="text-blue-200 text-sm">Pay at restaurants or send to friends</p>
+                              <h2 className="text-xl font-bold text-white">Tap to Pay</h2>
+                              <p className="text-blue-200 text-sm">Pay securely with your phone in stores</p>
                          </div>
                      </div>
 

@@ -5,9 +5,10 @@ import { generateFinancialInsight } from '../services/geminiService';
 
 interface InsightsProps {
   setViewState: (view: ViewState) => void;
+  isMobileTab?: boolean;
 }
 
-const Insights: React.FC<InsightsProps> = ({ setViewState }) => {
+const Insights: React.FC<InsightsProps> = ({ setViewState, isMobileTab = false }) => {
   const [aiTip, setAiTip] = useState<string>('Analyzing portfolio...');
   const [loading, setLoading] = useState(true);
 
@@ -27,13 +28,15 @@ const Insights: React.FC<InsightsProps> = ({ setViewState }) => {
   }, []);
 
   return (
-    <div className="p-4 md:p-8 pt-6 h-full bg-compass-bg pb-24 animate-fade-in">
-        <div className="flex items-center mb-6">
-            <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-white md:hidden">
-                <Icons.ArrowLeft />
-            </button>
-            <h1 className="text-xl md:text-3xl font-bold text-white">Insights & Guidance</h1>
-        </div>
+    <div className={`p-4 md:p-8 pt-6 h-full bg-compass-bg pb-24 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
+        {!isMobileTab && (
+            <div className="flex items-center mb-6">
+                <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-white md:hidden">
+                    <Icons.ArrowLeft />
+                </button>
+                <h1 className="text-xl md:text-3xl font-bold text-white">Insights & Guidance</h1>
+            </div>
+        )}
 
         {/* Filters */}
         <div className="flex gap-2 mb-8 overflow-x-auto no-scrollbar pb-2">

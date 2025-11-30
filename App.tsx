@@ -5,6 +5,8 @@ import SetGoal from './components/SetGoal';
 import Insights from './components/Insights';
 import ChatWidget from './components/ChatWidget';
 import Payments from './components/Payments';
+import Profile from './components/Profile';
+import Planning from './components/Planning';
 import { ViewState } from './types';
 import { Icons } from './constants';
 
@@ -24,6 +26,10 @@ const App: React.FC = () => {
         return <SetGoal setViewState={setViewState} />;
       case ViewState.INSIGHTS:
         return <Insights setViewState={setViewState} />;
+      case ViewState.PROFILE:
+        return <Profile setViewState={setViewState} />;
+      case ViewState.PLANNING:
+        return <Planning setViewState={setViewState} />;
       default:
         return <Dashboard setViewState={setViewState} setActivePaymentTab={setActivePaymentTab} />;
     }
@@ -65,6 +71,7 @@ const App: React.FC = () => {
             <NavItem view={ViewState.LINKED_ACCOUNTS} icon={Icons.Wallet} label="Linked Accounts" />
             <NavItem view={ViewState.CREATE_GOAL} icon={Icons.Target} label="Goals" />
             <NavItem view={ViewState.INSIGHTS} icon={Icons.Lightbulb} label="Insights" />
+            <NavItem view={ViewState.PROFILE} icon={Icons.User} label="Profile" />
         </nav>
 
         {/* Desktop Sidebar Footer / Net Worth Summary */}
@@ -113,9 +120,13 @@ const App: React.FC = () => {
                     <Icons.Wallet />
                     <span className="text-[10px] font-medium">Accounts</span>
                 </button>
-                <button onClick={() => setViewState(ViewState.INSIGHTS)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.INSIGHTS ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
-                    <Icons.Lightbulb />
-                    <span className="text-[10px] font-medium">Insights</span>
+                <button onClick={() => setViewState(ViewState.PLANNING)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PLANNING ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                    <Icons.Target />
+                    <span className="text-[10px] font-medium">Plan</span>
+                </button>
+                <button onClick={() => setViewState(ViewState.PROFILE)} className={`flex flex-col items-center gap-1 ${viewState === ViewState.PROFILE ? 'text-compass-primary' : 'text-compass-muted hover:text-white'}`}>
+                    <Icons.User />
+                    <span className="text-[10px] font-medium">Me</span>
                 </button>
             </div>
         </div>
