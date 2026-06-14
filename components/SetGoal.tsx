@@ -43,8 +43,6 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
     };
     
     console.log("Creating New Goal:", goalData);
-    // In a real app, we would dispatch an action or call an API here.
-    
     setViewState(ViewState.DASHBOARD);
   };
 
@@ -52,7 +50,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
     <div className={`p-4 md:p-8 pt-6 h-full min-h-screen bg-compass-bg pb-32 animate-fade-in ${isMobileTab ? 'pt-0' : ''}`}>
       {!isMobileTab && (
         <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0 flex items-center mb-6 justify-between pb-4 md:border-none">
-            <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-compass-text md:hidden">
+            <button onClick={() => setViewState(ViewState.DASHBOARD)} className="text-compass-text md:hidden p-2 -ml-2">
                 <Icons.ArrowLeft />
             </button>
             <div className="hidden md:block"></div> {/* Spacer */}
@@ -65,12 +63,12 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
         {/* Left Column: Form */}
         <div className="space-y-6">
             <div className="space-y-1 mb-2">
-                <h2 className="text-3xl font-bold text-compass-text">What are you saving for?</h2>
-                <p className="text-compass-muted">Let's plan your future, together.</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-compass-text">What are you saving for?</h2>
+                <p className="text-compass-muted text-sm md:text-base">Let's plan your future, together.</p>
             </div>
 
-            {/* Progress Bar (Mobile only essentially, or modified for desktop) */}
-            <div className="flex gap-2 mb-8">
+            {/* Progress Bar */}
+            <div className="flex gap-2 mb-4 md:mb-8">
                 <div className="h-1 flex-1 bg-compass-primary rounded-full"></div>
                 <div className="h-1 flex-1 bg-compass-secondary rounded-full"></div>
                 <div className="h-1 flex-1 bg-compass-secondary rounded-full"></div>
@@ -84,7 +82,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                     value={goalName}
                     onChange={(e) => setGoalName(e.target.value)}
                     placeholder="e.g., House Down Payment"
-                    className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 focus:outline-none focus:border-compass-primary transition-colors"
+                    className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 text-base focus:outline-none focus:border-compass-primary transition-colors"
                 />
             </div>
 
@@ -97,7 +95,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                             type="text" 
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pl-8 focus:outline-none focus:border-compass-primary transition-colors"
+                            className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pl-8 text-base focus:outline-none focus:border-compass-primary transition-colors"
                         />
                     </div>
                 </div>
@@ -109,7 +107,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                             value={targetDate}
                             onChange={(e) => setTargetDate(e.target.value)}
                             placeholder="Dec 2028"
-                            className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pr-10 focus:outline-none focus:border-compass-primary transition-colors"
+                            className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pr-10 text-base focus:outline-none focus:border-compass-primary transition-colors"
                         />
                         <div className="absolute right-4 top-4 text-compass-muted pointer-events-none">
                             <Icons.Calendar />
@@ -125,7 +123,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                     <select
                         value={selectedAccountId}
                         onChange={(e) => setSelectedAccountId(e.target.value)}
-                        className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pr-10 appearance-none focus:outline-none focus:border-compass-primary transition-colors cursor-pointer"
+                        className="w-full bg-compass-secondary border border-compass-secondary text-compass-text rounded-xl p-4 pr-10 appearance-none text-base focus:outline-none focus:border-compass-primary transition-colors cursor-pointer"
                     >
                         <option value="" disabled>Select an account</option>
                         {MOCK_ACCOUNTS.map((account) => (
@@ -135,7 +133,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                         ))}
                     </select>
                     <div className="absolute right-4 top-4 text-compass-muted pointer-events-none transform rotate-90">
-                        <Icons.ArrowLeft /> {/* Using rotate arrow as chevron */}
+                        <Icons.ArrowLeft /> 
                     </div>
                 </div>
                 <p className="text-xs text-compass-muted mt-2">Funds for this goal will be tracked from this account.</p>
@@ -149,14 +147,14 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                         <div 
                             key={s}
                             onClick={() => setStyle(s as any)}
-                            className={`p-4 rounded-xl border cursor-pointer transition-all ${style === s ? 'bg-compass-secondary border-compass-primary shadow-[0_0_15px_rgba(0,96,240,0.15)]' : 'bg-compass-card border-transparent hover:bg-compass-secondary'}`}
+                            className={`p-4 rounded-xl border cursor-pointer transition-all active:scale-[0.99] ${style === s ? 'bg-compass-secondary border-compass-primary shadow-[0_0_15px_rgba(0,96,240,0.15)]' : 'bg-compass-card border-transparent hover:bg-compass-secondary'}`}
                         >
                             <div className="flex items-center gap-3">
                                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${style === s ? 'border-compass-primary' : 'border-compass-muted'}`}>
                                     {style === s && <div className="w-2.5 h-2.5 bg-compass-text rounded-full"></div>}
                                 </div>
                                 <div>
-                                    <div className="text-compass-text font-semibold">{s}</div>
+                                    <div className="text-compass-text font-semibold text-base">{s}</div>
                                     <div className="text-compass-muted text-xs">
                                         {s === 'Conservative' ? 'Focuses on capital preservation.' : 
                                          s === 'Moderate' ? 'Balanced approach to growth.' : 
@@ -170,10 +168,10 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
             </div>
         </div>
 
-        {/* Right Column: Preview & Action (Desktop) */}
+        {/* Right Column: Preview & Action */}
         <div className="flex flex-col gap-6">
-             {/* Projection Card - Removed Border */}
-             <div className="bg-compass-card p-6 rounded-2xl shadow-xl h-full flex flex-col">
+             {/* Projection Card */}
+             <div className="bg-compass-card p-6 rounded-2xl shadow-xl h-full flex flex-col min-h-[320px]">
                 <div className="flex justify-between items-end mb-6">
                     <div>
                         <div className="text-sm text-compass-muted uppercase tracking-wider mb-1">Projected Growth</div>
@@ -188,7 +186,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                     </div>
                 </div>
 
-                <div className="flex-1 w-full min-h-[300px]">
+                <div className="flex-1 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-secondary)" />
@@ -210,7 +208,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
                 </div>
              </div>
 
-             {/* Desktop Action Button (Instead of sticky bottom) */}
+             {/* Desktop Action Button */}
              <button 
                 onClick={handleCreateGoal}
                 className="hidden lg:block w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-5 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all text-lg"
@@ -222,10 +220,10 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
         
       {/* Mobile Sticky Button */}
       {!isMobileTab && (
-          <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-compass-bg via-compass-bg to-transparent z-10">
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-compass-bg via-compass-bg to-transparent z-10 pb-8">
               <button 
                 onClick={handleCreateGoal}
-                className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all"
+                className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all active:scale-[0.98]"
               >
                   Create Goal
               </button>
@@ -235,7 +233,7 @@ const SetGoal: React.FC<SetGoalProps> = ({ setViewState, isMobileTab = false }) 
            <div className="lg:hidden p-4">
               <button 
                 onClick={handleCreateGoal}
-                className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all"
+                className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,96,240,0.4)] transition-all active:scale-[0.98]"
               >
                   Create Goal
               </button>

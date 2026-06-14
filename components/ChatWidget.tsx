@@ -56,26 +56,32 @@ const ChatWidget: React.FC = () => {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-20 md:bottom-8 right-4 md:right-8 w-14 h-14 rounded-full bg-compass-primary hover:bg-compass-primaryDark text-white shadow-[0_0_20px_rgba(0,96,240,0.5)] flex items-center justify-center z-50 transition-all transform hover:scale-110 ${isOpen ? 'rotate-90 scale-90 bg-compass-secondary' : ''}`}
+        className={`fixed bottom-24 md:bottom-8 right-4 md:right-8 w-12 h-12 md:w-14 md:h-14 rounded-full bg-compass-primary hover:bg-compass-primaryDark text-white shadow-[0_0_20px_rgba(0,96,240,0.5)] flex items-center justify-center z-50 transition-all transform hover:scale-110 active:scale-95 ${isOpen ? 'rotate-90 bg-compass-secondary' : ''}`}
       >
         {isOpen ? <Icons.X /> : <Icons.MessageCircle />}
       </button>
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-36 md:bottom-24 right-4 md:right-8 w-[calc(100%-2rem)] md:w-96 h-[500px] max-h-[70vh] bg-[#0f172a]/95 backdrop-blur-xl border border-compass-secondary/50 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-40 animate-fade-in origin-bottom-right">
+        <div className="fixed bottom-36 md:bottom-24 right-2 left-2 md:left-auto md:right-8 w-auto md:w-96 h-[500px] max-h-[60vh] md:max-h-[70vh] bg-[#0f172a]/95 backdrop-blur-xl border border-compass-secondary/50 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-40 animate-fade-in origin-bottom-right">
             {/* Header */}
-            <div className="p-4 border-b border-compass-secondary bg-compass-card/50 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-compass-primary/20 flex items-center justify-center text-compass-primary">
-                    <Icons.Sparkles />
+            <div className="p-4 border-b border-compass-secondary bg-compass-card/50 flex items-center gap-3 justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-compass-primary/20 flex items-center justify-center text-compass-primary">
+                        <Icons.Sparkles />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-white text-sm">Compass AI</h3>
+                        <p className="text-xs text-green-400 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                            Online
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h3 className="font-bold text-white text-sm">Compass AI</h3>
-                    <p className="text-xs text-green-400 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-                        Online
-                    </p>
-                </div>
+                {/* Mobile Close Button */}
+                <button onClick={() => setIsOpen(false)} className="md:hidden text-compass-muted p-2">
+                    <Icons.X />
+                </button>
             </div>
 
             {/* Messages Area */}
@@ -110,8 +116,8 @@ const ChatWidget: React.FC = () => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="Ask about your finances..."
-                        className="w-full bg-compass-secondary text-white rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-compass-primary transition-all placeholder-compass-muted"
+                        placeholder="Ask..."
+                        className="w-full bg-compass-secondary text-white rounded-xl py-3 pl-4 pr-12 text-base md:text-sm focus:outline-none focus:ring-1 focus:ring-compass-primary transition-all placeholder-compass-muted"
                     />
                     <button 
                         type="submit" 

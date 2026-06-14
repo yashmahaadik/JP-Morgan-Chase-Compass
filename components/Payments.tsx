@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icons } from '../constants';
 import { ViewState } from '../types';
+import { UPISimulator } from './UPISimulator';
 
 interface PaymentsProps {
   setViewState: (view: ViewState) => void;
   initialTab?: string;
+  region?: 'US' | 'IN';
 }
 
-const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfer' }) => {
+const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfer', region = 'US' }) => {
   const activeTab = initialTab;
   const [currentTab, setCurrentTab] = useState(initialTab);
   const [selectedContact, setSelectedContact] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Sync internal state if prop changes, though normally controlled by parent or simple state
   // simplified for this prototype to use internal state initialized by prop
@@ -21,15 +30,40 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
   // Use currentTab for rendering logic
   const renderTab = currentTab;
 
-  const contacts = ['Alex', 'Sarah', 'Mike', 'Jen', 'David', 'Mom', 'Landlord'];
+  const contacts = region === 'IN' 
+    ? ['Arjun', 'Sanya', 'Vikram', 'Pooja', 'Deepak', 'Maa', 'Landlord']
+    : ['Alex', 'Sarah', 'Mike', 'Jen', 'David', 'Mom', 'Landlord'];
   
-  const transactions = [
+  const [dynamicTransactions, setDynamicTransactions] = useState<any[]>([]);
+
+  const handlePaymentSettle = (amount: number, merchant: string, type: string) => {
+    const currentLocalTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const newTx = {
+      id: Date.now(),
+      name: merchant,
+      date: `Today, ${currentLocalTime}`,
+      amount: type.includes('Collect') || type.includes('received') ? amount : -amount,
+      type: type.includes('Collect') || type.includes('received') ? 'received' : 'sent'
+    };
+    setDynamicTransactions(prev => [newTx, ...prev]);
+  };
+
+  const usdTransactions = [
     { id: 1, name: 'Alex Smith', date: 'Today, 2:30 PM', amount: -25.00, type: 'sent' },
     { id: 2, name: 'Sarah Jones', date: 'Yesterday', amount: 15.50, type: 'received' },
     { id: 3, name: 'Uber Eats', date: 'Oct 02', amount: -42.80, type: 'payment' },
   ];
 
-  const subscriptions = [
+  const inrTransactions = [
+    { id: 1, name: 'Arjun Mehta (via GPay)', date: 'Today, 2:30 PM', amount: -250.00, type: 'sent' },
+    { id: 2, name: 'Sanya Sharma (UPI Transfer)', date: 'Yesterday', amount: 1500.00, type: 'received' },
+    { id: 3, name: 'Zomato India', date: 'Oct 02', amount: -420.00, type: 'payment' },
+  ];
+
+  const baseTransactions = region === 'IN' ? inrTransactions : usdTransactions;
+  const transactions = [...dynamicTransactions, ...baseTransactions];
+
+  const usdSubscriptions = [
     { name: 'Spotify Premium', amount: 15.99, date: 'Tomorrow', icon: <Icons.ShoppingBag /> },
     { name: 'Equinox Gym', amount: 180.00, date: 'Oct 05', icon: <Icons.Activity /> },
     { name: 'Netflix', amount: 22.50, date: 'Oct 12', icon: <Icons.Smartphone /> },
@@ -37,9 +71,20 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
     { name: 'Hulu', amount: 14.99, date: 'Oct 18', icon: <Icons.ShoppingBag /> },
   ];
 
+  const inrSubscriptions = [
+    { name: 'Spotify Premium India', amount: 119.00, date: 'Tomorrow', icon: <Icons.ShoppingBag /> },
+    { name: 'Gold\'s Gym Delhi', amount: 2500.00, date: 'Oct 05', icon: <Icons.Activity /> },
+    { name: 'Netflix Premium IN', amount: 649.00, date: 'Oct 12', icon: <Icons.Smartphone /> },
+    { name: 'iCloud Storage India', amount: 75.00, date: 'Oct 15', icon: <Icons.Zap /> },
+    { name: 'Disney+ Hotstar Super', amount: 299.00, date: 'Oct 18', icon: <Icons.ShoppingBag /> },
+  ];
+
+  const subscriptions = region === 'IN' ? inrSubscriptions : usdSubscriptions;
+  const currencySymbol = region === 'IN' ? '₹' : '$';
+
   return (
     <div className="p-4 md:p-8 pt-6 h-full bg-compass-bg pb-32 animate-fade-in">
-        {/* Sticky Header Container - Removed Border */}
+        {/* Sticky Header Container */}
         <div className="sticky top-[60px] md:top-0 z-20 bg-compass-bg/95 backdrop-blur-md -mx-4 px-4 pt-2 md:pt-0 md:mx-0 md:px-0">
             <div className="flex items-center mb-4">
                 <button onClick={() => setViewState(ViewState.DASHBOARD)} className="mr-4 text-compass-text md:hidden">
@@ -49,7 +94,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
             </div>
 
             {/* Custom Tabs */}
-            <div className="flex p-1 bg-compass-secondary/50 rounded-xl mb-8 overflow-x-auto no-scrollbar">
+            <div className="flex p-1 bg-compass-secondary/50 rounded-xl mb-6 md:mb-8 overflow-x-auto no-scrollbar">
                 {[
                     { id: 'transfer', label: 'Transfer', icon: Icons.Transfer },
                     { id: 'bills', label: 'Bills', icon: Icons.Repeat },
@@ -82,29 +127,42 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                      
-                     {/* TAP TO PAY (Replacing Scan & Pay) - Removed Border */}
-                     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 shadow-xl relative overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform">
-                         <div className="absolute right-0 top-0 h-full w-1/2 bg-white/5 skew-x-12 transform translate-x-12"></div>
-                         <div className="relative z-10 flex flex-col items-center py-4">
-                              <div className="bg-white p-3 rounded-2xl mb-3 shadow-lg">
-                                  {/* Using Wifi icon rotated 90deg to simulate NFC/Contactless */}
-                                  <div className="text-black transform rotate-90"><Icons.Wifi /></div>
-                              </div>
-                              <h2 className="text-xl font-bold text-white">Tap to Pay</h2>
-                              <p className="text-blue-200 text-sm">Pay securely with your phone in stores</p>
-                         </div>
-                     </div>
+                     {/* REGIONAL PAYMENT CONTROLS */}
+                     {region === 'IN' ? (
+                         /* INDIA EDITION: Render the rich UPI GPay Scan & Tap Simulator */
+                         <UPISimulator onPaymentSuccess={handlePaymentSettle} isDesktop={isDesktop} />
+                     ) : (
+                         /* US EDITION: Tap to Pay card, hidden on desktop/PC */
+                         !isDesktop && (
+                             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 shadow-xl relative overflow-hidden group cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-transform">
+                                 <div className="absolute right-0 top-0 h-full w-1/2 bg-white/5 skew-x-12 transform translate-x-12"></div>
+                                 <div className="relative z-10 flex flex-col items-center py-4">
+                                      <div className="bg-white p-3 rounded-2xl mb-3 shadow-lg">
+                                          {/* Using Wifi icon rotated 90deg to simulate NFC/Contactless */}
+                                          <div className="text-black transform rotate-90"><Icons.Wifi /></div>
+                                      </div>
+                                      <h2 className="text-xl font-bold text-white">Tap to Pay</h2>
+                                      <p className="text-blue-200 text-sm">Pay securely with your phone in stores</p>
+                                 </div>
+                             </div>
+                         )
+                     )}
 
-                     {/* QUICK ACTIONS GRID */}
-                     <div className="grid grid-cols-4 gap-4">
-                          {[
+                     {/* QUICK ACTIONS GRID - Mobile Optimized Gap */}
+                     <div className="grid grid-cols-4 gap-2 md:gap-4">
+                          {(region === 'IN' ? [
+                              { label: 'Pay via UPI', icon: <Icons.Phone />, color: 'text-blue-400' },
+                              { label: 'Bank IMPS', icon: <Icons.Bank />, color: 'text-emerald-400' },
+                              { label: 'Self Transfer', icon: <Icons.Users />, color: 'text-purple-400' },
+                              { label: 'BHIM Balance', icon: <Icons.ShieldCheck />, color: 'text-orange-400' },
+                          ] : [
                               { label: 'Send with Zelle®', icon: <Icons.Phone />, color: 'text-blue-400' },
                               { label: 'Wire / ACH', icon: <Icons.Bank />, color: 'text-emerald-400' },
                               { label: 'Transfer to Self', icon: <Icons.Users />, color: 'text-purple-400' },
                               { label: 'Check Balance', icon: <Icons.ShieldCheck />, color: 'text-orange-400' },
-                          ].map((action, i) => (
-                              <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group">
-                                   <div className="w-14 h-14 rounded-full bg-compass-card flex items-center justify-center text-xl group-hover:scale-110 transition-all shadow-lg">
+                          ]).map((action, i) => (
+                              <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform">
+                                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-compass-card flex items-center justify-center text-lg md:text-xl group-hover:scale-110 transition-all shadow-lg">
                                        <span className={action.color}>{action.icon}</span>
                                    </div>
                                    <span className="text-[10px] text-center font-medium text-compass-muted group-hover:text-compass-text leading-tight max-w-[70px]">{action.label}</span>
@@ -116,10 +174,10 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                      <div>
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-sm font-bold text-compass-text uppercase tracking-wider">People</h3>
-                            <button className="text-compass-primary text-xs font-bold">Search</button>
+                            <button className="text-compass-primary text-xs font-bold p-2">Search</button>
                         </div>
                         <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-y-6 gap-x-2">
-                             <div className="flex flex-col items-center gap-2 cursor-pointer group">
+                             <div className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform">
                                 <div className="w-14 h-14 rounded-full bg-compass-bg flex items-center justify-center text-compass-muted hover:text-compass-text transition-all shadow-md">
                                     <Icons.Plus />
                                 </div>
@@ -129,7 +187,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                                 <div 
                                     key={name} 
                                     onClick={() => setSelectedContact(i)}
-                                    className="flex flex-col items-center gap-2 cursor-pointer group"
+                                    className="flex flex-col items-center gap-2 cursor-pointer group active:scale-95 transition-transform"
                                 >
                                     <div className={`w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold shadow-lg transition-all border-2 border-transparent group-hover:border-compass-primary ${
                                          i % 4 === 0 ? 'bg-gradient-to-br from-purple-600 to-indigo-700 text-white' : 
@@ -147,7 +205,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                 </div>
 
                 <div className="space-y-6">
-                     {/* SPLIT BILL WIDGET - Removed Border */}
+                     {/* SPLIT BILL WIDGET */}
                      <div className="bg-compass-card rounded-3xl p-6 shadow-xl">
                           <div className="flex justify-between items-center mb-4">
                               <h3 className="text-lg font-bold text-compass-text flex items-center gap-2"><Icons.Split /> Split Expense</h3>
@@ -155,10 +213,14 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                           </div>
                           <div className="bg-compass-bg/50 rounded-xl p-4 mb-4">
                               <div className="flex justify-between items-center mb-2">
-                                  <span className="text-sm text-compass-text font-medium">Dinner at Nobu</span>
+                                  <span className="text-sm text-compass-text font-medium">
+                                      {region === 'IN' ? 'Dinner at Social Hauz Khas' : 'Dinner at Nobu'}
+                                  </span>
                                   <span className="text-sm text-compass-muted">Yesterday</span>
                               </div>
-                              <div className="text-2xl font-bold text-compass-text mb-4">$342.80</div>
+                              <div className="text-2xl font-bold text-compass-text mb-4">
+                                  {region === 'IN' ? '₹3,428.00' : '$342.80'}
+                              </div>
                               <div className="flex -space-x-2 mb-4">
                                   {['A','S','M','J'].map((initial, idx) => (
                                       <div key={idx} className="w-8 h-8 rounded-full bg-gray-700 border-2 border-compass-card flex items-center justify-center text-xs font-bold text-white">
@@ -167,18 +229,18 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                                   ))}
                                   <div className="w-8 h-8 rounded-full bg-compass-primary border-2 border-compass-card flex items-center justify-center text-xs font-bold text-white">+2</div>
                               </div>
-                              <button className="w-full bg-compass-secondary hover:bg-compass-primary hover:text-white text-compass-muted py-2 rounded-lg text-sm font-bold transition-all">
-                                  Request $57.13 each
+                              <button className="w-full bg-compass-secondary hover:bg-compass-primary hover:text-white text-compass-muted py-3 rounded-lg text-sm font-bold transition-all active:scale-[0.98]">
+                                  Request {region === 'IN' ? '₹571.30' : '$57.13'} each
                               </button>
                           </div>
                      </div>
 
-                    {/* RECENT ACTIVITY - Removed Border */}
+                    {/* RECENT ACTIVITY */}
                     <div className="bg-compass-card rounded-3xl p-6 shadow-xl h-fit">
                         <h3 className="text-lg font-bold text-compass-text mb-6">Recent Activity</h3>
                         <div className="space-y-4">
                             {transactions.map((tx) => (
-                                <div key={tx.id} className="flex items-center justify-between p-3 hover:bg-compass-secondary/30 rounded-xl transition-colors cursor-pointer">
+                                <div key={tx.id} className="flex items-center justify-between p-3 hover:bg-compass-secondary/30 rounded-xl transition-colors cursor-pointer active:scale-[0.99]">
                                     <div className="flex items-center gap-4">
                                         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
                                             tx.type === 'sent' ? 'bg-compass-secondary text-white' : 
@@ -192,7 +254,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                                         </div>
                                     </div>
                                     <div className={`font-bold ${tx.amount > 0 ? 'text-emerald-400' : 'text-compass-text'}`}>
-                                        {tx.amount > 0 ? '+' : ''}{tx.amount.toFixed(2)}
+                                        {tx.amount > 0 ? '+' : ''}{currencySymbol}{Math.abs(tx.amount).toLocaleString(region === 'IN' ? 'en-IN' : 'en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </div>
                                 </div>
                             ))}
@@ -205,10 +267,10 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
         {/* BILLS TAB */}
         {renderTab === 'bills' && (
              <div className="space-y-8 max-w-4xl mx-auto">
-                 {/* PAY BILLS GRID */}
+                 {/* PAY BILLS GRID - Mobile Optimized Gap */}
                  <div>
                      <h3 className="text-lg font-bold text-compass-text mb-4">Pay Bills</h3>
-                     <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
+                     <div className="grid grid-cols-4 md:grid-cols-4 gap-2 md:gap-4">
                          {[
                              { label: 'Phone Bill', icon: <Icons.Smartphone />, color: 'text-blue-400' },
                              { label: 'Cable / TV', icon: <Icons.Tv />, color: 'text-purple-400' },
@@ -219,33 +281,33 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                              { label: 'Insurance', icon: <Icons.ShieldCheck />, color: 'text-rose-400' },
                              { label: 'More', icon: <Icons.MoreVertical />, color: 'text-gray-400' },
                          ].map((item, i) => (
-                              <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group p-2 rounded-xl hover:bg-compass-secondary/30 transition-all">
+                              <div key={i} className="flex flex-col items-center gap-2 cursor-pointer group p-2 rounded-xl hover:bg-compass-secondary/30 transition-all active:scale-95">
                                    <div className={`w-12 h-12 rounded-2xl bg-compass-card flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-lg ${item.color}`}>
                                        {item.icon}
                                    </div>
-                                   <span className="text-[10px] text-compass-muted group-hover:text-compass-text font-medium">{item.label}</span>
+                                   <span className="text-[10px] text-compass-muted group-hover:text-compass-text font-medium text-center">{item.label}</span>
                               </div>
                          ))}
                      </div>
                  </div>
 
-                 {/* Removed Border */}
+                 {/* Upcoming Subscriptions */}
                  <div className="bg-compass-card rounded-3xl p-6 shadow-xl">
                       <h3 className="text-lg font-bold text-compass-text mb-6">Upcoming Subscriptions</h3>
                       <div className="space-y-2">
                            {subscriptions.map((bill, i) => (
-                               <div key={i} className="bg-compass-bg/50 rounded-xl p-4 flex items-center justify-between group hover:bg-compass-secondary transition-all cursor-pointer border border-transparent hover:border-compass-primary/20">
+                               <div key={i} className="bg-compass-bg/50 rounded-xl p-4 flex items-center justify-between group hover:bg-compass-secondary transition-all cursor-pointer border border-transparent hover:border-compass-primary/20 active:scale-[0.99]">
                                    <div className="flex items-center gap-4">
                                        <div className="w-10 h-10 rounded-lg bg-compass-secondary group-hover:bg-compass-card flex items-center justify-center text-compass-muted group-hover:text-compass-text transition-colors">
                                            {bill.icon}
                                        </div>
                                        <div>
-                                           <div className="font-bold text-compass-text">{bill.name}</div>
-                                           <div className="text-xs text-compass-muted font-medium">Auto-pay on {bill.date}</div>
+                                           <div className="font-bold text-compass-text text-sm">{bill.name}</div>
+                                           <div className="text-[10px] text-compass-muted font-medium">Auto-pay on {bill.date}</div>
                                        </div>
                                    </div>
                                    <div className="text-right">
-                                       <div className="font-bold text-compass-text text-lg">${bill.amount}</div>
+                                       <div className="font-bold text-compass-text text-base">{currencySymbol}{bill.amount}</div>
                                        <button className="text-[10px] bg-compass-secondary hover:bg-white hover:text-black px-2 py-1 rounded transition-colors mt-1">Manage</button>
                                    </div>
                                </div>
@@ -261,7 +323,9 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                 <div className="bg-gradient-to-r from-yellow-600 to-amber-700 rounded-3xl p-8 mb-8 text-center relative overflow-hidden shadow-2xl">
                      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                      <h2 className="text-sm font-bold text-yellow-100 uppercase tracking-widest mb-2 relative z-10">Total Rewards Earned</h2>
-                     <div className="text-5xl font-bold text-white mb-2 drop-shadow-md relative z-10">$482</div>
+                     <div className="text-5xl font-bold text-white mb-2 drop-shadow-md relative z-10">
+                         {region === 'IN' ? '₹4,820' : '$482'}
+                     </div>
                      <p className="text-yellow-200 text-sm relative z-10">You're a savings superstar! 🌟</p>
                 </div>
 
@@ -269,18 +333,18 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                      {/* Unscratched */}
                      {[1, 2].map((i) => (
-                         <div key={`locked-${i}`} className="aspect-square bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex flex-col items-center justify-center p-4 relative overflow-hidden group cursor-pointer hover:scale-105 transition-transform shadow-lg border-2 border-indigo-400/50">
+                         <div key={`locked-${i}`} className="aspect-square bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex flex-col items-center justify-center p-4 relative overflow-hidden group cursor-pointer hover:scale-105 active:scale-95 transition-transform shadow-lg border-2 border-indigo-400/50">
                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 to-transparent animate-pulse"></div>
                              <Icons.Gift />
                              <span className="text-white font-bold mt-2">Tap to Scratch</span>
                          </div>
                      ))}
                      
-                     {/* Scratched/Revealed - Removed Border */}
+                     {/* Scratched/Revealed */}
                      {[
-                         { amount: '$12', label: 'Cashback' },
-                         { amount: '$5', label: 'Coffee Reward' },
-                         { amount: '$25', label: 'Referral Bonus' },
+                         { amount: region === 'IN' ? '₹120' : '$12', label: 'Cashback' },
+                         { amount: region === 'IN' ? '₹50' : '$5', label: 'Coffee Reward' },
+                         { amount: region === 'IN' ? '₹250' : '$25', label: 'Referral Bonus' },
                          { amount: '10%', label: 'Off Nike' }
                      ].map((reward, i) => (
                          <div key={i} className="aspect-square bg-compass-card rounded-2xl flex flex-col items-center justify-center p-4 relative overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
@@ -297,58 +361,57 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
         {renderTab === 'wallet' && (
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                  <div className="space-y-6">
-                    {/* Removed Border */}
-                    <div className="bg-gradient-to-br from-[#0c1e4c] via-[#003087] to-[#001b4d] rounded-2xl p-8 aspect-[1.586/1] shadow-2xl relative overflow-hidden group">
+                    {/* Card Visual */}
+                    <div className="bg-gradient-to-br from-[#0c1e4c] via-[#003087] to-[#001b4d] rounded-2xl p-6 md:p-8 aspect-[1.586/1] shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                         
                         <div className="flex justify-between items-start z-10 relative">
-                            <span className="text-xs font-bold text-white/90 tracking-[0.2em] uppercase">Chase</span>
+                            <span className="text-[10px] md:text-xs font-bold text-white/90 tracking-[0.2em] uppercase">Chase</span>
                             <Icons.Zap />
                         </div>
-                        <div className="mt-12 z-10 relative">
+                        <div className="mt-8 md:mt-12 z-10 relative">
                             <div className="flex gap-3 mb-4">
-                                <div className="w-12 h-8 bg-yellow-500/80 rounded flex items-center justify-center">
-                                    <div className="w-8 h-5 border border-white/30 rounded-sm"></div>
+                                <div className="w-10 h-7 md:w-12 md:h-8 bg-yellow-500/80 rounded flex items-center justify-center">
+                                    <div className="w-6 h-4 md:w-8 md:h-5 border border-white/30 rounded-sm"></div>
                                 </div>
                                 <Icons.Transfer />
                             </div>
-                            <div className="text-white font-mono text-xl md:text-2xl tracking-widest mb-2 shadow-black drop-shadow-md">
+                            <div className="text-white font-mono text-lg md:text-2xl tracking-widest mb-2 shadow-black drop-shadow-md">
                                 4000 1234 5678 9010
                             </div>
-                            <div className="flex justify-between items-end mt-6">
+                            <div className="flex justify-between items-end mt-4 md:mt-6">
                                 <div>
-                                    <div className="text-[10px] text-white/60 uppercase tracking-widest mb-1">Cardholder</div>
-                                    <div className="text-sm text-white font-medium uppercase tracking-wider">Alex Johnson</div>
+                                    <div className="text-[9px] md:text-[10px] text-white/60 uppercase tracking-widest mb-1">Cardholder</div>
+                                    <div className="text-xs md:text-sm text-white font-medium uppercase tracking-wider">Yash Mahadik</div>
                                 </div>
-                                <div className="text-sm text-white/90 font-bold italic">VISA SIGNATURE</div>
+                                <div className="text-xs md:text-sm text-white/90 font-bold italic">VISA SIGNATURE</div>
                             </div>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        {/* Removed Border */}
-                        <button className="bg-compass-card hover:bg-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all shadow-md">
+                        <button className="bg-compass-card hover:bg-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all shadow-md active:scale-[0.98]">
                             <div className="p-2 bg-compass-primary/20 rounded-full text-compass-primary"><Icons.ShieldCheck /></div>
                             <span className="text-sm font-bold text-compass-text">Lock Card</span>
                         </button>
-                        <button className="bg-compass-card hover:bg-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all shadow-md">
+                        <button className="bg-compass-card hover:bg-compass-secondary p-4 rounded-xl flex flex-col items-center gap-2 transition-all shadow-md active:scale-[0.98]">
                             <div className="p-2 bg-compass-primary/20 rounded-full text-compass-primary"><Icons.Repeat /></div>
                             <span className="text-sm font-bold text-compass-text">Replace</span>
                         </button>
                     </div>
                  </div>
 
-                 {/* Removed Border */}
+                 {/* Points Detail */}
                  <div className="bg-compass-card rounded-3xl p-6 shadow-xl">
                       <div className="flex justify-between items-center mb-6">
                           <h3 className="text-lg font-bold text-compass-text">Ultimate Rewards®</h3>
-                          <span className="text-compass-primary text-sm font-bold cursor-pointer hover:underline">Redeem</span>
+                          <span className="text-compass-primary text-sm font-bold cursor-pointer hover:underline p-2">Redeem</span>
                       </div>
                       <div className="bg-compass-bg rounded-2xl p-6 mb-6">
                            <div className="text-sm text-compass-muted font-medium uppercase tracking-wide mb-1">Current Balance</div>
                            <div className="text-4xl font-bold text-compass-text mb-2">54,320 <span className="text-lg text-compass-muted">pts</span></div>
                            <div className="text-sm text-emerald-400 font-bold bg-emerald-400/10 inline-block px-3 py-1 rounded-full">
-                               Approx. $543.20 cash back
+                               Approx. {region === 'IN' ? '₹45,320' : '$543.20'} cash back
                            </div>
                       </div>
                       

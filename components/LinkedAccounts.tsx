@@ -4,9 +4,50 @@ import { ViewState } from '../types';
 
 interface LinkedAccountsProps {
   setViewState: (view: ViewState) => void;
+  region?: 'US' | 'IN';
 }
 
-const LinkedAccounts: React.FC<LinkedAccountsProps> = ({ setViewState }) => {
+const LinkedAccounts: React.FC<LinkedAccountsProps> = ({ setViewState, region = 'US' }) => {
+  const currencySymbol = region === 'IN' ? '₹' : '$';
+
+  const inrAccounts = MOCK_ACCOUNTS.map((account) => {
+    if (account.name.includes('Chase - Total Checking')) {
+      return {
+        ...account,
+        name: 'HDFC Bank - Savings Max',
+        type: 'Savings',
+        balance: Math.round(account.balance * 83),
+        accountNumber: '4455'
+      };
+    } else if (account.name.includes('J.P. Morgan')) {
+      return {
+        ...account,
+        name: 'ICICI Direct - Demat Portfolio',
+        balance: Math.round(account.balance * 83),
+        accountNumber: '9988'
+      };
+    } else if (account.name.includes('Bank of America')) {
+      return {
+        ...account,
+        name: 'State Bank of India (SBI) - FD Account',
+        type: 'Investment',
+        balance: 1500000,
+        status: 'active' as const,
+        lastUpdated: 'Updated 10m ago',
+        accountNumber: '3322'
+      };
+    } else if (account.name.includes('Chase - Sapphire Preferred')) {
+      return {
+        ...account,
+        name: 'HDFC Regalia Credit Card',
+        balance: Math.round(account.balance * 83),
+        accountNumber: '8877'
+      };
+    }
+    return { ...account, balance: Math.round(account.balance * 83) };
+  });
+
+  const accounts = region === 'IN' ? inrAccounts : MOCK_ACCOUNTS;
   return (
     <div className="p-4 md:p-8 pt-6 h-full bg-compass-bg animate-fade-in">
         {/* Sticky Header - Removed Border */}
@@ -33,7 +74,7 @@ const LinkedAccounts: React.FC<LinkedAccountsProps> = ({ setViewState }) => {
         <h2 className="text-lg font-bold text-compass-text mb-4">Connected Accounts</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pb-20">
-            {MOCK_ACCOUNTS.map((account) => {
+            {accounts.map((account) => {
                  let statusColor = 'bg-compass-primary';
                  let statusText = 'text-compass-muted';
                  
@@ -76,7 +117,7 @@ const LinkedAccounts: React.FC<LinkedAccountsProps> = ({ setViewState }) => {
                                     {account.lastUpdated}
                                 </div>
                                 <div className={`font-bold ${account.balance < 0 ? 'text-[#ef4444]' : 'text-compass-text'}`}>
-                                    {account.balance < 0 ? `($${Math.abs(account.balance).toLocaleString()})` : `$${account.balance.toLocaleString()}`}
+                                    {account.balance < 0 ? `(${currencySymbol}${Math.abs(account.balance).toLocaleString()})` : `${currencySymbol}${account.balance.toLocaleString()}`}
                                 </div>
                             </div>
                         </div>

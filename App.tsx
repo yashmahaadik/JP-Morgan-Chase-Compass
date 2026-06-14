@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [viewState, setViewState] = useState<ViewState>(ViewState.DASHBOARD);
   const [activePaymentTab, setActivePaymentTab] = useState('transfer');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [region, setRegion] = useState<'US' | 'IN'>('US');
 
   // Apply theme to document
   useEffect(() => {
@@ -27,21 +28,21 @@ const App: React.FC = () => {
   const renderView = () => {
     switch (viewState) {
       case ViewState.DASHBOARD:
-        return <Dashboard setViewState={setViewState} setActivePaymentTab={setActivePaymentTab} />;
+        return <Dashboard setViewState={setViewState} setActivePaymentTab={setActivePaymentTab} region={region} />;
       case ViewState.PAYMENTS:
-        return <Payments setViewState={setViewState} initialTab={activePaymentTab} />;
+        return <Payments setViewState={setViewState} initialTab={activePaymentTab} region={region} />;
       case ViewState.LINKED_ACCOUNTS:
-        return <LinkedAccounts setViewState={setViewState} />;
+        return <LinkedAccounts setViewState={setViewState} region={region} />;
       case ViewState.CREATE_GOAL:
         return <SetGoal setViewState={setViewState} />;
       case ViewState.INSIGHTS:
         return <Insights setViewState={setViewState} />;
       case ViewState.PROFILE:
-        return <Profile setViewState={setViewState} theme={theme} toggleTheme={toggleTheme} />;
+        return <Profile setViewState={setViewState} theme={theme} toggleTheme={toggleTheme} region={region} setRegion={setRegion} />;
       case ViewState.PLANNING:
         return <Planning setViewState={setViewState} />;
       default:
-        return <Dashboard setViewState={setViewState} setActivePaymentTab={setActivePaymentTab} />;
+        return <Dashboard setViewState={setViewState} setActivePaymentTab={setActivePaymentTab} region={region} />;
     }
   };
 
@@ -66,7 +67,7 @@ const App: React.FC = () => {
   return (
     <div className="bg-compass-bg min-h-screen text-compass-text font-sans flex flex-col md:flex-row transition-colors duration-300">
       
-      {/* Desktop Sidebar - Removed Border Right */}
+      {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-72 bg-compass-bg p-6 fixed h-full z-20">
         <div className="mb-10 px-2 flex items-center gap-3">
             <div className="w-8 h-8 bg-compass-primary rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(0,96,240,0.5)]">
@@ -87,7 +88,9 @@ const App: React.FC = () => {
         {/* Desktop Sidebar Footer / Net Worth Summary */}
         <div className="p-5 bg-compass-card/50 rounded-2xl backdrop-blur-sm shadow-sm">
             <div className="text-xs text-compass-muted mb-2 uppercase font-bold tracking-wider">Total Net Worth</div>
-            <div className="text-2xl font-bold text-compass-text mb-1">$150,000</div>
+            <div className="text-2xl font-bold text-compass-text mb-1">
+                {region === 'IN' ? '₹1,24,50,000' : '$150,000'}
+            </div>
             <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">+2.5%</span>
                 <span className="text-xs text-compass-muted">vs last month</span>
@@ -97,7 +100,7 @@ const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 md:ml-72 relative min-h-screen overflow-x-hidden">
-        {/* Mobile Header - Sticky - Removed Border Bottom */}
+        {/* Mobile Header - Sticky */}
         <header className="md:hidden sticky top-0 z-30 bg-compass-bg p-4 flex items-center gap-3 shadow-md">
             <div className="w-8 h-8 bg-compass-primary rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(0,96,240,0.5)]">
                 <Icons.Target /> 
@@ -118,7 +121,7 @@ const App: React.FC = () => {
             {viewState === ViewState.DASHBOARD && (
                 <button 
                   onClick={() => setViewState(ViewState.CREATE_GOAL)} 
-                  className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-3.5 rounded-xl shadow-[0_0_15px_rgba(0,96,240,0.3)] transition-all mb-4"
+                  className="w-full bg-compass-primary hover:bg-compass-primaryDark text-white font-bold py-3.5 rounded-xl shadow-[0_0_15px_rgba(0,96,240,0.3)] transition-all mb-4 active:scale-[0.98]"
                 >
                     Add Funds
                 </button>
