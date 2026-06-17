@@ -55,7 +55,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
   ];
 
   const inrTransactions = [
-    { id: 1, name: 'Arjun Mehta (via GPay)', date: 'Today, 2:30 PM', amount: -250.00, type: 'sent' },
+    { id: 1, name: 'Arjun Mehta (via UPI)', date: 'Today, 2:30 PM', amount: -250.00, type: 'sent' },
     { id: 2, name: 'Sanya Sharma (UPI Transfer)', date: 'Yesterday', amount: 1500.00, type: 'received' },
     { id: 3, name: 'Zomato India', date: 'Oct 02', amount: -420.00, type: 'payment' },
   ];
@@ -129,7 +129,7 @@ const Payments: React.FC<PaymentsProps> = ({ setViewState, initialTab = 'transfe
                      
                      {/* REGIONAL PAYMENT CONTROLS */}
                      {region === 'IN' ? (
-                         /* INDIA EDITION: Render the rich UPI GPay Scan & Tap Simulator */
+                         /* INDIA EDITION: Render the rich UPI Scan & Tap Simulator */
                          <UPISimulator onPaymentSuccess={handlePaymentSettle} isDesktop={isDesktop} />
                      ) : (
                          /* US EDITION: Tap to Pay card, hidden on desktop/PC */

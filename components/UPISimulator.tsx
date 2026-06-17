@@ -19,6 +19,48 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
   const [upiPin, setUpiPin] = useState<string>('');
   const [audioPlayed, setAudioPlayed] = useState<boolean>(false);
 
+  // Live camera stream states
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  // Hook to control browser camera capture on scanner activation
+  useEffect(() => {
+    let activeStream: MediaStream | null = null;
+    if (activeUpiMode === 'scan' && scanStep === 'scanning') {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then((stream) => {
+          activeStream = stream;
+          setCameraStream(stream);
+          setCameraError(null);
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+          }
+        })
+        .catch((err) => {
+          console.error('Camera access failed:', err);
+          setCameraError('Permission or device issue. Displaying simulated scanning beam.');
+        });
+    } else {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach((track) => track.stop());
+        setCameraStream(null);
+      }
+    }
+
+    return () => {
+      if (activeStream) {
+        activeStream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [scanStep, activeUpiMode]);
+
+  useEffect(() => {
+    if (cameraStream && videoRef.current) {
+      videoRef.current.srcObject = cameraStream;
+    }
+  }, [cameraStream, scanStep]);
+
   // Merchant presets in India
   const indianMerchants = [
     { name: 'Tata Starbucks (Connaught Place)', upi: 'starbucks@okaxis' },
@@ -53,10 +95,10 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
     setScanStep('scanning');
     setUpiPin('');
     
-    // Simulate focusing/scanning with laser
+    // Simulate focusing/scanning with laser and real camera capture
     setTimeout(() => {
       setScanStep('amount');
-    }, 1500);
+    }, 3500);
   };
 
   const handleConfirmAmount = () => {
@@ -82,7 +124,7 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
       setScanStep('success');
       const amt = parseFloat(payAmount) || 0;
       onPaymentSuccess(amt, selectedMerchant?.name || 'UPI Merchant', 'UPI Scan');
-      triggerAudioSettle(`Received rupees ${amt} on G Pay`);
+      triggerAudioSettle(`Rupees ${amt} paid successfully via UPI`);
     }, 2000);
   };
 
@@ -94,7 +136,7 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
   const simulateExternalScan = () => {
     setGenStep('success');
     const amt = parseFloat(customAmount) || 500;
-    triggerAudioSettle(`Rupees ${amt} received on Google Pay`);
+    triggerAudioSettle(`Rupees ${amt} received successfully via UPI`);
     setTimeout(() => {
       onPaymentSuccess(amt, 'Received via UPI QR', 'UPI Collect');
     }, 1000);
@@ -129,7 +171,7 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
         {/* UPI Header on Card */}
         <div className="flex justify-between items-center w-full mb-3 mb-4 px-2">
           <div className="text-[10px] font-bold text-gray-400 tracking-wider">BHIM UPI</div>
-          <div className="text-[10px] font-bold text-blue-600 bg-blue-100/60 px-2 py-0.5 rounded-full">GPAY SECURE</div>
+          <div className="text-[10px] font-bold text-emerald-600 bg-emerald-100/60 px-2 py-0.5 rounded-full">UPI SECURE</div>
         </div>
         
         {/* Fake QR Pattern Grid SVG */}
@@ -155,10 +197,10 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
             <path d="M 35,75 H 40 V 95 H 35 Z M 45,70 H 60 V 75 H 45 Z M 50,80 H 65 V 90 H 50 Z M 75,65 H 90 V 75 H 75 Z" fill="currentColor" />
             <path d="M 70,80 H 85 V 95 H 70 Z M 90,85 H 95 V 90 H 90 Z" fill="currentColor" />
 
-            {/* Micro GPay Logo center overlay */}
-            <g transform="translate(42, 42)">
-              <rect x="0" y="0" width="16" height="16" rx="3" fill="#0060F0" />
-              <path d="M 3,8 C 3,5 5,3 8,3 C 9.5,3 10.7,3.5 11.5,4.3 L 10,5.8 C 9.5,5.3 8.8,5 8,5 C 6.3,5 5,6.3 5,8 C 5,9.7 6.3,11 8,11 C 9.7,11 11,9.7 11,8 L 8,8 L 8,6.5 L 12.5,6.5 C 12.6,7 12.7,7.5 12.7,8 C 12.7,10.5 11,12.5 8,12.5 C 5,12.5 3,10.5 3,8 Z" fill="white" transform="scale(0.8) translate(2, 2)" />
+            {/* Micro UPI Logo center overlay */}
+            <g transform="translate(39, 41)">
+              <rect x="0" y="0" width="22" height="18" rx="4" fill="#0060F0" />
+              <text x="11" y="12" fill="white" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">UPI</text>
             </g>
           </svg>
           {/* Scan laser line animation */}
@@ -171,7 +213,7 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
         <p className="text-slate-800 font-mono text-sm mt-3 font-semibold tracking-wider">
           {amt > 0 ? `₹${amt.toLocaleString('en-IN')}` : 'Scan to Connect'}
         </p>
-        <p className="text-gray-400 text-[10px] mt-1 font-mono break-all">alex.johnson@okchase</p>
+        <p className="text-gray-400 text-[10px] mt-1 font-mono break-all">yashmahadik@okaxis</p>
       </div>
     );
   };
@@ -213,7 +255,7 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
                 <Icons.QrCode />
               </div>
               <div>
-                <h3 className="font-bold text-compass-text text-base">UPI GPay Scanner</h3>
+                <h3 className="font-bold text-compass-text text-base">UPI Scanner</h3>
                 <p className="text-xs text-compass-muted mt-1 max-w-[280px] mx-auto leading-relaxed">
                   Select a mock merchant below to simulate scanning their UPI QR code.
                 </p>
@@ -241,19 +283,37 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
           {scanStep === 'scanning' && (
             <div className="flex flex-col items-center py-8 relative">
               <div className="w-48 h-48 border-2 border-compass-primary rounded-3xl relative overflow-hidden flex items-center justify-center bg-black/40">
-                {/* Scanner Target Guide Corners */}
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-white"></div>
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-white"></div>
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-white"></div>
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-white"></div>
+                {/* Real Stream Live View if permission was given */}
+                {cameraStream ? (
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <Icons.QrCode />
+                )}
 
-                <Icons.QrCode />
+                {/* Scanner Target Guide Corners */}
+                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-white z-10"></div>
+                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-white z-10"></div>
+                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-white z-10"></div>
+                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-white z-10"></div>
                 
                 {/* Floating laser bar */}
-                <div className="absolute left-0 right-0 h-1 bg-compass-primary shadow-[0_0_12px_#0060F0] animate-[bounce_1.5s_infinite]"></div>
+                <div className="absolute left-0 right-0 h-1 bg-compass-primary shadow-[0_0_12px_#0060F0] animate-[bounce_2s_infinite] z-20"></div>
               </div>
-              <p className="text-xs text-compass-muted mt-4 font-mono animate-pulse tracking-widest">
-                SCANNING UPI CODE...
+              
+              {cameraError && (
+                <p className="text-[10px] text-rose-400 mt-2 text-center max-w-[240px] leading-tight">
+                  Camera inactive: {cameraError}
+                </p>
+              )}
+
+              <p className="text-xs text-compass-muted mt-4 font-mono animate-pulse tracking-widest uppercase">
+                {cameraStream ? 'LIVE CAMERA SCANNING...' : 'SCANNING UPI CODE...'}
               </p>
               <p className="text-xs font-semibold text-compass-primary mt-1">
                 {selectedMerchant?.name}
@@ -413,7 +473,7 @@ export const UPISimulator: React.FC<UPISimulatorProps> = ({ onPaymentSuccess, is
               <div>
                 <h3 className="font-bold text-compass-text text-base">Generate UPI QR</h3>
                 <p className="text-xs text-compass-muted mt-1 leading-relaxed">
-                  Enter a desired amount in Rupees to automatically customize the GPay on-screen QR code.
+                  Enter a desired amount in Rupees to automatically customize the BHIM UPI on-screen QR code.
                 </p>
               </div>
 

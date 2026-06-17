@@ -1,6 +1,6 @@
 {
   "name": "Chase Compass",
   "description": "A high-fidelity financial dashboard for Gen Z investors, featuring net worth tracking, goal setting, and AI-powered financial insights.",
-  "requestFramePermissions": [],
-  "majorCapabilities": []
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
